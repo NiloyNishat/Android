@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@color/colorbackground">
+
+        <ImageView
+            android:id="@+id/new_im_ListView"
+            android:layout_width="100dp"
+            android:layout_height="125dp"
+            android:layout_margin="10dp"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="135dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/nm_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="Name:" />
+
+            <TextView
+                android:id="@+id/un_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Roll: "/>
+
+            <TextView
+                android:id="@+id/dob_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Roll: "/>
+
+            <TextView
+                android:id="@+id/gn_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textColor="@color/colorPrimary"
+                android:text="Roll: "/>
+            <TextView
+                android:id="@+id/ml_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textColor="@color/colorReddish"
+                android:text="Roll: "/>
+
+            <TextView
+                android:id="@+id/cn_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="Roll: "/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

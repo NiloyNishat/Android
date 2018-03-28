@@ -3,32 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.studentbook.Info">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="Info of the Students"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
-        <ScrollView
-            android:layout_width="400dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
+        >
 
-            <TextView
-                android:id="@+id/json_textView"
-                android:paddingTop="25dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textColor="@color/colorAccent"
-                android:hint="loading..."
-                android:gravity="center"
-                />
+        <ListView
+            android:id="@+id/listView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        </ScrollView>
+        </ListView>
 
     </LinearLayout>
 

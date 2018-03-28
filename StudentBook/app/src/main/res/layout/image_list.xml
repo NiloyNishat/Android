@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:background="#fff">
+        android:background="@color/colorbackground">
 
 
         <LinearLayout
@@ -23,12 +23,14 @@
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
                 android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
                 android:text="Name:" />
 
             <TextView
                 android:id="@+id/roll_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
+                android:textColor="@color/colorPrimary"
                 android:text="Roll:" />
         </LinearLayout>
 

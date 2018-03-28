@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
@@ -25,8 +28,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.jar.Manifest;
 
 public class Registration extends Activity implements AdapterView.OnItemSelectedListener {
     Context context;
@@ -47,6 +54,8 @@ public class Registration extends Activity implements AdapterView.OnItemSelected
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         DBhelper = new DatabaseHelper(this);
+        ActivityCompat.requestPermissions(Registration.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE},1);
+
 
         initialize();
         processArrayAdapterToHandleDate();
@@ -240,12 +249,38 @@ public class Registration extends Activity implements AdapterView.OnItemSelected
                 if(checkValidityOfTheForm(name, email, contact, username, password)){
 //                    Toast.makeText(getApplicationContext(), "successful!", Toast.LENGTH_LONG).show();
                     Toast.makeText(getApplicationContext(), "your username: " + username + "\nyour password: " + password, Toast.LENGTH_LONG).show();
-                    Student student = new Student(name, dateOfBirth, gender.getText().toString(), email, contact, username, password, imageViewToByte(profileImage));
+                    Student student = new Student(name, dateOfBirth, gender.getText().toString(), email, contact, username, password);
                     DBhelper.insert(student);
+                    saveImage(student.username);
                     setNull();
                     Intent intent = new Intent(getApplicationContext(), LoginPage.class);
                     startActivity(intent);
                 }
+            }
+
+            private void saveImage(String username) {
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) profileImage.getDrawable();
+                Bitmap image = bitmapDrawable.getBitmap();
+
+                String path = Environment.getExternalStorageDirectory().toString();
+                File dir = new File(path + "/StudentBook");
+                dir.mkdirs();
+                  String imageName = username + ".png";
+                File file = new File(dir, imageName);
+//                Toast.makeText(getApplicationContext(), "folder created: " + path, Toast.LENGTH_LONG).show();
+
+                FileOutputStream outputStream = null;
+                try{
+                    outputStream = new FileOutputStream((file));
+                    image.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                    outputStream.flush();
+                    outputStream.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
             }
 
             private void setNull() {
@@ -261,7 +296,9 @@ public class Registration extends Activity implements AdapterView.OnItemSelected
             }
 
             private byte[] imageViewToByte(ImageView profileImage) {
-                Bitmap bitmap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
+                profileImage.setDrawingCacheEnabled(true);
+                profileImage.buildDrawingCache();
+                Bitmap bitmap = profileImage.getDrawingCache();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 return stream.toByteArray();

@@ -1,6 +1,10 @@
 package com.example.android.studentbook;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,17 +14,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.util.List;
+
 /**
  * Created by IOT on 3/18/2018.
  */
 
 public class MyListViewAdapter extends ArrayAdapter {
-    Integer[] images;
-    String[] name;
-    String[] roll;
+    List <String> name;
+    List <String> images;
+    List <String> roll;
     Activity context;
 
-    public MyListViewAdapter(Activity context, Integer[] images, String[] name, String[] roll) {
+    public MyListViewAdapter(Activity context,List <String>  images, List <String>  name, List <String>  roll) {
         super(context, R.layout.image_list, name);
         this.context = context;
         this.name = name;
@@ -31,6 +38,8 @@ public class MyListViewAdapter extends ArrayAdapter {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+
+
         View view = convertView;
         ViewHolder viewHolder = null;
 
@@ -45,9 +54,15 @@ public class MyListViewAdapter extends ArrayAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        viewHolder.imageView.setImageResource(images[position]);
-        viewHolder.textviewName.setText(name[position]);
-        viewHolder.textViewRoll.setText(roll[position]);
+        String picturePath = Environment.getExternalStorageDirectory().toString() + "/StudentBook/" + images.get(position) + ".png";
+        File imgFile = new File(picturePath);
+        if(imgFile.exists()){
+            Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            viewHolder.imageView.setImageBitmap(bitmap);
+        }
+
+        viewHolder.textviewName.setText(name.get(position));
+        viewHolder.textViewRoll.setText(roll.get(position));
 
 
         return view;

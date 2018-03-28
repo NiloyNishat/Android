@@ -2,8 +2,9 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/item1" android:title="image" android:icon="@drawable/image_icon"/>
-    <item android:id="@+id/item2" android:title="info" android:icon="@drawable/info_icon"/>
-    <item android:id="@+id/item3" android:title="log out" android:icon="@drawable/logout_icon"/>
+    <item android:id="@+id/item0" android:title="Profile" android:icon="@drawable/splashscreen_icon"/>
+    <item android:id="@+id/item1" android:title="Image" android:icon="@drawable/image_icon"/>
+    <item android:id="@+id/item2" android:title="Info" android:icon="@drawable/info_icon"/>
+    <item android:id="@+id/item3" android:title="Log out" android:icon="@drawable/logout_icon"/>
 
 </menu>

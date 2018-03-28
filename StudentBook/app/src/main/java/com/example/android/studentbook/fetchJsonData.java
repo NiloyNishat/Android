@@ -61,7 +61,7 @@ public class fetchJsonData extends AsyncTask<Object, Object, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        Info.jsonInfoTextView.setText(parsedData);
+//        Info.jsonInfoTextView.setText(parsedData);
 
     }
 }

@@ -34,6 +34,15 @@ public class LoginPage extends Activity {
         login();
     }
 
+     @Override
+    public void onBackPressed(){
+         Intent a = new Intent(Intent.ACTION_MAIN);
+         a.addCategory(Intent.CATEGORY_HOME);
+         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+         startActivity(a);
+         finish();
+    }
+
     private void register() {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +63,9 @@ public class LoginPage extends Activity {
 
                 else{
                     if(checkValidity(usernameET.getText().toString(), passwordET.getText().toString())) {
+
+                        HomeFragement hp = new HomeFragement();
+                        hp.username = usernameET.getText().toString();
                         Intent intent = new Intent(getApplicationContext(), HomePage.class);
                         startActivity(intent);
                     }
@@ -74,5 +86,6 @@ public class LoginPage extends Activity {
             }
         });
     }
+
 
 }

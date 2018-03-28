@@ -12,9 +12,8 @@ public class Student {
     String contact;
     String username;
     String password;
-    byte[] image;
 
-    public Student(String name, String dateofbirth, String gender, String emailAdress, String contact, String username, String password, byte[] image) {
+    public Student(String name, String dateofbirth, String gender, String emailAdress, String contact, String username, String password) {
         this.name = name;
         this.dateofbirth = dateofbirth;
         this.gender = gender;
@@ -22,6 +21,5 @@ public class Student {
         this.contact = contact;
         this.username = username;
         this.password = password;
-        this.image = image;
     }
 }

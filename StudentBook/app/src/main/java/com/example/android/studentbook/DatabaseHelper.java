@@ -5,13 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by IOT on 3/22/2018.
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 8;
     private static final String DATABASE_NAME = "StudentBook.db";
     private static final String TABLE_NAME = "StudentInfo";
     private static final String COL0 = "id";
@@ -22,7 +23,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COL5 = "contact";
     private static final String COL6 = "username";
     private static final String COL7 = "password";
-    private static final String COL8 = "image";
 
     private static final String TABLE_CREATE = "create table " + TABLE_NAME +
             " (id integer primary key AUTOINCREMENT, " +
@@ -32,8 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "email_id text not null, " +
             "contact text not null, " +
             "username text not null, " +
-            "password text not null, " +
-            "image blob);";
+            "password text not null);";
     SQLiteDatabase db;
 
     public DatabaseHelper(Context context) {
@@ -65,7 +64,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL5, student.contact);
         values.put(COL6, student.username);
         values.put(COL7, student.password);
-        values.put(COL8, student.image);
 
         db.insert(TABLE_NAME, null, values);
         db.close();
@@ -78,15 +76,78 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(serachQuery, null);
 
         if(cursor.moveToFirst()){
-            while (cursor.moveToNext()){
+            do{
                 tempUsername = cursor.getString(0);
                if(tempUsername.equals(username)){
                    tempPassword = cursor.getString(1);
                    break;
                }
 
-            }
+            }while (cursor.moveToNext());
         }
         return tempPassword;
     }
+
+
+    public  Cursor getAllData(){
+        db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from " + TABLE_NAME, null);
+        return res;
+    }
+
+    public String[] getInfo(String username) {
+        db = this.getReadableDatabase();
+        String[] res = new String[6];
+        String tempUsername, tempPassword ="";
+        String serachQuery = "select username, name, date_of_birth, gender, email_id, contact, password from " + TABLE_NAME;
+        Cursor cursor = db.rawQuery(serachQuery, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                tempUsername = cursor.getString(0);
+                if(tempUsername.equals(username)){
+                    res[0] = cursor.getString(1);
+                    res[1] = cursor.getString(2);
+                    res[2] = cursor.getString(3);
+                    res[3] = cursor.getString(4);
+                    res[4] = cursor.getString(5);
+                    res[5] = cursor.getString(6);
+                    break;
+                }
+
+            }while (cursor.moveToNext());
+        }
+        return res;
+    }
+
+    public byte[] getImage(String username) {
+        db = this.getReadableDatabase();
+        byte[] res = null;
+        String tempUsername;
+//         String serachQuery = "select image, username from " + TABLE_NAME;
+        String serachQuery = "select image from " + TABLE_NAME + " where username = '" + username + "' ;";
+        Cursor cursor = db.rawQuery(serachQuery, null);
+
+        res = cursor.getBlob(0);
+//        if(cursor.moveToFirst()){
+//            do{
+//                if(!cursor.isNull(cursor.getColumnIndex("username"))) {
+//                    tempUsername = cursor.getString(cursor.getColumnIndex("username"));
+//
+//                    if (tempUsername.equals(username)) {
+//                        res = cursor.getBlob(cursor.getColumnIndex("image"));
+//                        break;
+//                    }
+//                }
+//                else{
+//                    Log.e("image", "null");
+//                }
+//
+//            }while (cursor.moveToNext());
+//        }
+        return res;
+    }
+
+
 }
+
