@@ -31,14 +31,17 @@ public class Homepage extends AppCompatActivity implements SearchView.OnQueryTex
         viewPager = (ViewPager) findViewById(R.id.viewPager_homepage);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
+        adapter.addFrgament(new FragmentUser(), "");
         adapter.addFrgament(new FragmentContacts(), "");
         adapter.addFrgament(new FragmentCall(), "");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_call);
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_contact);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_user);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_contact);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_web);
+
     }
 
 

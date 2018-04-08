@@ -10,9 +10,6 @@ public class Contact {
     String name, phone;
     Bitmap photo;
 
-    public Contact( ) {
-    }
-
     public Contact(String name, String phone, Bitmap photo) {
         this.name = name;
         this.phone = phone;

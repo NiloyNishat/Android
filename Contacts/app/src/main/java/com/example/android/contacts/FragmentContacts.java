@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,10 +71,8 @@ public class FragmentContacts extends Fragment {
                 null, null, null, null);
         getActivity().startManagingCursor(cursor);
 
-        if (cursor.moveToFirst())
-        {
-            do
-            {
+        if (cursor.moveToFirst()) {
+            do {
             String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
             String phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 //            String phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.));
@@ -82,7 +81,6 @@ public class FragmentContacts extends Fragment {
             contactList.add(new Contact(name,phoneNo,bitmap));
             } while (cursor.moveToNext());
         }
-        cursor.close();
     }
 
     private Bitmap getImage(String photoUri) {
@@ -90,11 +88,19 @@ public class FragmentContacts extends Fragment {
         if (photoUri != null) {
             try {
                 photo = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.parse(photoUri));
+                ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+
+                photo.compress(Bitmap.CompressFormat.PNG,50/100,byteArrayOutputStream);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        else {
+            photo= BitmapFactory.decodeResource(v.getContext().getResources(),
+                    R.drawable.ic_user);
+
         }
         return photo;
     }
@@ -122,27 +128,6 @@ public class FragmentContacts extends Fragment {
 
             }
         }
-    }
-
-    public InputStream openPhoto(long contactId) {
-        Uri contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId);
-        Uri photoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-        Cursor cursor = getActivity().getContentResolver().query(photoUri,
-                new String[] {ContactsContract.Contacts.Photo.PHOTO}, null, null, null);
-        if (cursor == null) {
-            return null;
-        }
-        try {
-            if (cursor.moveToFirst()) {
-                byte[] data = cursor.getBlob(0);
-                if (data != null) {
-                    return new ByteArrayInputStream(data);
-                }
-            }
-        } finally {
-            cursor.close();
-        }
-        return null;
     }
 
 

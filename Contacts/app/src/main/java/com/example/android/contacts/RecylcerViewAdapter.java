@@ -1,15 +1,18 @@
 package com.example.android.contacts;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,7 +36,7 @@ public class RecylcerViewAdapter extends RecyclerView.Adapter<RecylcerViewAdapte
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
         v = LayoutInflater.from(context).inflate(R.layout.icon_contact, parent, false);
-        MyViewHolder holder = new MyViewHolder(v);
+        MyViewHolder holder = new MyViewHolder(v, context, contactList);
         return holder;
 
     }
@@ -58,17 +61,41 @@ public class RecylcerViewAdapter extends RecyclerView.Adapter<RecylcerViewAdapte
         return contactList.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tv_name;
         TextView tv_phone;
         ImageView image;
+        List <Contact> contactList;
+        Context context;
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView, Context context, List<Contact> contactList) {
             super(itemView);
 
+            itemView.setOnClickListener(this);
             tv_name = (TextView) itemView.findViewById(R.id.icon_name);
             tv_phone = (TextView) itemView.findViewById(R.id.icon_phoneNo);
             image = (ImageView) itemView.findViewById(R.id.icon_image);
+            this.contactList = contactList;
+            this.context = context;
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            Contact contact = this.contactList.get(position);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+
+            Intent intent = new Intent(this.context, DetailedInfo.class);
+            if(contact.photo != null) {
+                contact.photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                intent.putExtra("image", byteArray);
+            }
+            intent.putExtra("name", contact.name);
+            intent.putExtra("phone", contact.phone);
+            this.context.startActivity(intent);
 
         }
     }
