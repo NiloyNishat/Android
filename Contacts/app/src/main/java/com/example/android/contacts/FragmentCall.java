@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +36,8 @@ import com.google.api.services.people.v1.People;
 import com.google.api.services.people.v1.PeopleScopes;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.Inflater;
 
 /**
@@ -42,6 +47,11 @@ import java.util.zip.Inflater;
 public class FragmentCall extends Fragment {
     View v;
     Button bt_getGoogle;
+    private static boolean isGoogleContactAvailable = false;
+    static RecylcerViewAdapter recylcerViewAdapter;
+    GoogleDB googleDB;
+    RecyclerView myRecyclerView;
+
 
     public FragmentCall() {
     }
@@ -51,6 +61,34 @@ public class FragmentCall extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.call_fragment, container, false);
         bt_getGoogle = (Button) v.findViewById(R.id.button_get_google);
+        googleDB = new GoogleDB(getContext());
+        myRecyclerView = v.findViewById(R.id.call_recyclerview);
+        checkGoogleButton();
+        runGoogleButton();
+        setContact();
+
+        return v;
+    }
+
+    private void setContact() {
+        if(googleDB.doesTableExist()){
+            List<Contact> mylist = googleDB.getAllData();
+            handleRecyclerView(mylist);
+        }
+    }
+
+    private void handleRecyclerView(List<Contact> listFromDB) {
+        myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        myRecyclerView.setAdapter(recylcerViewAdapter);
+
+        recylcerViewAdapter = new RecylcerViewAdapter(getContext(), listFromDB);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        myRecyclerView.setLayoutManager(mLayoutManager);
+        myRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        myRecyclerView.setAdapter(recylcerViewAdapter);
+    }
+
+    private void runGoogleButton() {
         bt_getGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +97,15 @@ public class FragmentCall extends Fragment {
             }
         });
 
-        return v;
+    }
+
+    private void checkGoogleButton() {
+        if(isGoogleContactAvailable){
+            bt_getGoogle.setText("Reload from Google");
+        }
+        else{
+            bt_getGoogle.setText("Get Google Contacts");
+        }
     }
 
 

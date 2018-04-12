@@ -55,9 +55,14 @@ public class FragmentUser extends Fragment{
         bt_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writeToFile();
-                ll_regular.setVisibility(View.VISIBLE);
-                ll_edit.setVisibility(View.GONE);
+                if(et_name.getText().toString().equals("") || et_phone.getText().toString().equals("") || et_email.getText().toString().equals("")){
+                    Toast.makeText(v.getContext(), "Enter all the credentials", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    writeToFile();
+                    ll_regular.setVisibility(View.VISIBLE);
+                    ll_edit.setVisibility(View.GONE);
+                }
             }
 
             private void writeToFile() {
@@ -95,9 +100,9 @@ public class FragmentUser extends Fragment{
         try {
             BufferedReader bReader = new BufferedReader(new InputStreamReader(getActivity().openFileInput(FILE_NAME)));
             String line;
-            StringBuffer text = new StringBuffer();
+            StringBuilder text = new StringBuilder();
             while ((line = bReader.readLine()) != null) {
-                text.append(line + "\n");
+                text.append( line + "\n");
             }
 
             inputString = text.toString();
@@ -105,6 +110,7 @@ public class FragmentUser extends Fragment{
             tv_name.setText(input[0]);
             tv_phone.setText(input[1]);
             tv_email.setText(input[2]);
+            bReader.close();
         } catch (IOException e) {
             e.printStackTrace();
             tv_name.setText("Your Name");

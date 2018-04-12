@@ -1,6 +1,7 @@
 package com.example.android.contacts;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Build;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.MenuItemCompat;
@@ -16,11 +17,12 @@ import org.apache.commons.io.FileUtils;
 
 import java.util.ArrayList;
 
-public class Homepage extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class Homepage extends AppCompatActivity{
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private RecylcerViewAdapter recylcerViewAdapter;
+    static int tabIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +43,8 @@ public class Homepage extends AppCompatActivity implements SearchView.OnQueryTex
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_user);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_contact);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_web);
+        viewPager.setCurrentItem(0,true);
 
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_item, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
-        searchView.setOnQueryTextListener(this);
-        return true;
     }
 
     @Override
@@ -59,10 +52,9 @@ public class Homepage extends AppCompatActivity implements SearchView.OnQueryTex
         FileUtils.deleteQuietly(this.getCacheDir());
         Intent a = new Intent(Intent.ACTION_MAIN);
         a.addCategory(Intent.CATEGORY_HOME);
-        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(a);
         finish();
-
     }
 
     @Override
@@ -75,24 +67,4 @@ public class Homepage extends AppCompatActivity implements SearchView.OnQueryTex
         }
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        newText = newText.toLowerCase();
-        ArrayList<Contact> newList = new ArrayList<>();
-
-        for(Contact contact : FragmentContacts.contactList){
-            String name = contact.name.toLowerCase();
-            if(name.contains(newText)){
-                newList.add(contact);
-            }
-            FragmentContacts.recylcerViewAdapter.setFilter(newList);
-
-        }
-        return false;
-    }
 }

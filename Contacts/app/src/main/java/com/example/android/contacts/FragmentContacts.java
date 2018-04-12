@@ -1,16 +1,13 @@
 package com.example.android.contacts;
 
 import android.Manifest;
-import android.content.ContentUris;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -18,19 +15,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +36,13 @@ public class FragmentContacts extends Fragment {
     View v;
     private RecyclerView myRecyclerView;
     static RecylcerViewAdapter recylcerViewAdapter;
-    static List <Contact> contactList;
+    static boolean hasDB;
+    List <Contact> myContactList;
+    List <Contact> listFromDB;
+    EditText et_search;
+    Button bt_getContact;
+    ContactDB contactDB;
+
     public FragmentContacts() {
     }
 
@@ -50,19 +50,80 @@ public class FragmentContacts extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.contact_fragment, container, false);
-        contactList = new ArrayList<>();
-        check();
-        myRecyclerView = (RecyclerView) v.findViewById(R.id.contact_recyclerview);
-//        RecylcerViewAdapter recylcerViewAdapter = new RecylcerViewAdapter(getContext(), contactList);
-        myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        myRecyclerView.setAdapter(recylcerViewAdapter);
+        myContactList = new ArrayList<>();
+        et_search = v.findViewById(R.id.editText_search);
+        bt_getContact = v.findViewById(R.id.button_getContact);
+        contactDB = new ContactDB(getContext());
+        hasDB = contactDB.doesTableExist();
+        refreshContact();
+        applySearchOption();
+        Log.d("hasDb", Boolean.toString(hasDB));
+        if(!hasDB){
+            check();
+        }
 
-        recylcerViewAdapter = new RecylcerViewAdapter(getContext(), contactList);
+        listFromDB = contactDB.getAllData();
+        handleRecyclerView(listFromDB);
+
+
+        return v;
+    }
+
+    private void handleRecyclerView(List<Contact> listFromDB) {
+        myRecyclerView = v.findViewById(R.id.contact_recyclerview);
+        myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recylcerViewAdapter = new RecylcerViewAdapter(getContext(), listFromDB);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         myRecyclerView.setLayoutManager(mLayoutManager);
         myRecyclerView.setItemAnimator(new DefaultItemAnimator());
         myRecyclerView.setAdapter(recylcerViewAdapter);
-        return v;
+    }
+
+    private void refreshContact() {
+        bt_getContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myContactList = new ArrayList<>();
+                listFromDB = new ArrayList<>();
+                contactDB.deleteAllfromTable();
+                check();
+                handleRecyclerView(listFromDB);
+//                v.refreshDrawableState();
+            }
+        });
+    }
+
+    private void applySearchOption() {
+        et_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+
+            private void filter(String s) {
+                s = s.toLowerCase();
+                ArrayList<Contact> newList = new ArrayList<>();
+
+                for(Contact contact : listFromDB){
+                    String name = contact.name.toLowerCase();
+                    if(name.contains(s)){
+                        newList.add(contact);
+                    }
+                    FragmentContacts.recylcerViewAdapter.setFilter(newList);
+
+                }
+            }
+        });
     }
 
 
@@ -71,52 +132,55 @@ public class FragmentContacts extends Fragment {
                 null, null, null, null);
         getActivity().startManagingCursor(cursor);
 
-        if (cursor.moveToFirst()) {
-            do {
-            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-            String phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//            String phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.));
-            String imageId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
-            Bitmap bitmap = getImage(imageId);
-            contactList.add(new Contact(name,phoneNo,bitmap));
-            } while (cursor.moveToNext());
-        }
-    }
-
-    private Bitmap getImage(String photoUri) {
-        Bitmap photo = null;
-        if (photoUri != null) {
+        if (cursor != null && cursor.moveToFirst() ) {
             try {
-                photo = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.parse(photoUri));
-                ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-
-                photo.compress(Bitmap.CompressFormat.PNG,50/100,byteArrayOutputStream);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                while (!cursor.isClosed() && cursor.moveToNext()) {
+                    String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                    String phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//            String phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.));
+                    String imageId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI));
+//                    Contact contact = new Contact(name, phoneNo, bitmap);
+                    Contact myContact = new Contact(name, phoneNo, imageId);
+//                    if(!contactList.contains(contact)){
+//                        contactList.add(contact);
+//                    }
+                    if(!myContactList.contains(myContact)){
+                        myContactList.add(myContact);
+                    }
+                }
+            }catch (IllegalArgumentException e) {
+                Log.e("error ==", e.getMessage());
+            } finally {
+                try {
+                    if (!cursor.isClosed()) {
+                        Log.d("cursor: ", "closed");
+                        cursor.close();
+                    }
+                    cursor = null;
+                } catch (Exception e) {
+                    Log.e("While closing cursor", e.getMessage());
+                }
             }
         }
-        else {
-            photo= BitmapFactory.decodeResource(v.getContext().getResources(),
-                    R.drawable.ic_user);
-
-        }
-        return photo;
+        contactDB.insert( myContactList);
+        Log.d("ContactListLength: ", Integer.toString(myContactList.size()));
     }
+
+
 
     private void check(){
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS)
                 == PackageManager.PERMISSION_GRANTED) {
-            Runnable r = new Runnable() {
+            Handler mHandler = new Handler(Looper.getMainLooper());
+            mHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     getContactList();
 
                 }
-            };
-            Thread thread = new Thread(r);
-            thread.start();
+            });
+//            Thread thread = new Thread(r);
+//            thread.start();
         }else{
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)) {

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,10 +47,11 @@ public class RecylcerViewAdapter extends RecyclerView.Adapter<RecylcerViewAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.tv_name.setText(contactList.get(position).name);
-        holder.tv_phone.setText(contactList.get(position).phone);
+        holder.tv_name.setText(contactList.get(holder.getAdapterPosition()).name);
+        holder.tv_phone.setText(contactList.get(holder.getAdapterPosition()).phone);
 //        Bitmap bitmap = BitmapFactory.decodeByteArray(contactList.get(position).photo, 0, contactList.get(position).photo.length);
-        Bitmap bitmap = contactList.get(position).photo;
+        Bitmap bitmap = getImage(contactList.get(holder.getAdapterPosition()).photoURI);
+        contactList.get(holder.getAdapterPosition()).photo = bitmap;
         if(bitmap == null){
             holder.image.setImageResource(R.drawable.ic_user);
         }
@@ -56,9 +61,40 @@ public class RecylcerViewAdapter extends RecyclerView.Adapter<RecylcerViewAdapte
 
     }
 
+    private Bitmap getImage(String photoUri) {
+        Bitmap photo = null;
+        if (photoUri != null) {
+            try {
+                System.gc();
+                photo = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(photoUri));
+                ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+                photo.compress(Bitmap.CompressFormat.PNG,50/100,byteArrayOutputStream);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            photo= BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_user);
+
+        }
+        return photo;
+    }
+
     @Override
     public int getItemCount() {
         return contactList.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

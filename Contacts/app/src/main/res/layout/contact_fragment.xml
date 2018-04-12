@@ -3,6 +3,27 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <EditText
+        android:id="@+id/editText_search"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:drawablePadding="15dp"
+        android:drawableRight="@drawable/ic_search"
+        android:textColor="@color/colorWhite"
+        android:hint="Enter a name..."
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:textColorHint="@color/colorLight"
+        android:background="@color/colorDamn"
+        />
+
+    <Button
+        android:id="@+id/button_getContact"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:layout_gravity="right"
+        android:text="Refresh Contact"/>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/contact_recyclerview"
