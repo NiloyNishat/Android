@@ -5,8 +5,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,14 +83,17 @@ public class GoogleDB extends SQLiteOpenHelper {
     public List<Contact> getAllData(){
         db = this.getWritableDatabase();
         List <Contact> res = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select name, phone, photo_url from " + TABLE_NAME, null);
+        Cursor cursor = db.rawQuery("select name, phone, photo_url, email_id, id from " + TABLE_NAME, null);
         if(cursor.moveToFirst()){
             do{
                 String name = cursor.getString(0);
                 String phone  = cursor.getString(1);
                 String photo = cursor.getString(2);
-                Contact contact = new Contact(name,phone,photo);
+                String email = cursor.getString(3);
+                String id = cursor.getString(4);
+                Contact contact = new Contact(id, name,phone,photo,email);
                 res.add(contact);
+
             }while (cursor.moveToNext());
         }
 
@@ -105,4 +119,5 @@ public class GoogleDB extends SQLiteOpenHelper {
         db = this.getWritableDatabase();
         db.execSQL("delete from "+ TABLE_NAME);
     }
+
 }

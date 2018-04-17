@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,8 +19,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,6 +39,7 @@ import java.util.List;
 public class RecylcerViewAdapter extends RecyclerView.Adapter<RecylcerViewAdapter.MyViewHolder> {
     Context context;
     List <Contact> contactList;
+    Bitmap photo = null;
 
     public RecylcerViewAdapter(Context context, List<Contact> contactList) {
         this.context = context;
@@ -48,10 +59,21 @@ public class RecylcerViewAdapter extends RecyclerView.Adapter<RecylcerViewAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.tv_name.setText(contactList.get(holder.getAdapterPosition()).name);
-        holder.tv_phone.setText(contactList.get(holder.getAdapterPosition()).phone);
-//        Bitmap bitmap = BitmapFactory.decodeByteArray(contactList.get(position).photo, 0, contactList.get(position).photo.length);
-        Bitmap bitmap = getImage(contactList.get(holder.getAdapterPosition()).photoURI);
+        if(contactList.get(holder.getAdapterPosition()).emailID == null){
+            holder.tv_phone.setText(contactList.get(holder.getAdapterPosition()).phone);
+        }
+
+        if(contactList.get(holder.getAdapterPosition()).emailID != null){
+            holder.tv_phone.setText(contactList.get(holder.getAdapterPosition()).phone + "\n"
+                    + contactList.get(holder.getAdapterPosition()).emailID);
+        }//        Bitmap bitmap = BitmapFactory.decodeByteArray(contactList.get(position).photo, 0, contactList.get(position).photo.length);
+        Bitmap bitmap = getImage(contactList.get(holder.getAdapterPosition()) );
         contactList.get(holder.getAdapterPosition()).photo = bitmap;
+        if(contactList.get(holder.getAdapterPosition()).fromGoogle){
+            new DownloadImageTask(contactList.get(holder.getAdapterPosition())).execute();
+            bitmap = contactList.get(holder.getAdapterPosition()).photo;
+
+        }
         if(bitmap == null){
             holder.image.setImageResource(R.drawable.ic_user);
         }
@@ -61,26 +83,44 @@ public class RecylcerViewAdapter extends RecyclerView.Adapter<RecylcerViewAdapte
 
     }
 
-    private Bitmap getImage(String photoUri) {
-        Bitmap photo = null;
-        if (photoUri != null) {
-            try {
-                System.gc();
-                photo = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(photoUri));
-                ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-                photo.compress(Bitmap.CompressFormat.PNG,50/100,byteArrayOutputStream);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+    private Bitmap getImage(Contact contact) {
+        if (contact.photoURI != null){
+            if(!contact.fromGoogle) {
+                try {
+//                System.gc();
+                    photo = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(contact.photoURI));
+//                ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+//                photo.compress(Bitmap.CompressFormat.PNG,50/100,byteArrayOutputStream);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(contact.fromGoogle){
+                photo = showImage(contact.name+contact.id);
+                contact.photo = photo;
             }
         }
+
         else {
             photo= BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_user);
-
         }
         return photo;
     }
+
+    private Bitmap showImage(String photoUri) {
+        Bitmap bitmap = null;
+        String picturePath = Environment.getExternalStorageDirectory().toString() + "/myContact/" + photoUri + ".png";
+        File imgFile = new File(picturePath);
+        if(imgFile.exists()){
+            bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+        }
+        return bitmap;
+    }
+
+
+
 
     @Override
     public int getItemCount() {
@@ -131,6 +171,12 @@ public class RecylcerViewAdapter extends RecyclerView.Adapter<RecylcerViewAdapte
             }
             intent.putExtra("name", contact.name);
             intent.putExtra("phone", contact.phone);
+            if(contact.emailID != null){
+                intent.putExtra("email", contact.emailID);
+            }
+            if(contact.emailID == null || contact.emailID.equals("")){
+                intent.putExtra("email", "no email");
+            }
             this.context.startActivity(intent);
 
         }
@@ -151,7 +197,32 @@ public class RecylcerViewAdapter extends RecyclerView.Adapter<RecylcerViewAdapte
         }
     }
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Void> {
+        Contact contact;
+        Bitmap bitmap;
 
+        public DownloadImageTask(Contact contact) {
+            this.contact = contact;
+        }
+
+        protected Void doInBackground(String... urls) {
+            String urldisplay = contact.photoURI;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                bitmap = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            contact.photo = bitmap;
+        }
+    }
 }
 
 

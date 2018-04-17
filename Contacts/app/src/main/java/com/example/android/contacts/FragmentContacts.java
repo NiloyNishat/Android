@@ -57,12 +57,12 @@ public class FragmentContacts extends Fragment {
         hasDB = contactDB.doesTableExist();
         refreshContact();
         applySearchOption();
-        Log.d("hasDb", Boolean.toString(hasDB));
         if(!hasDB){
             check();
         }
 
         listFromDB = contactDB.getAllData();
+
         handleRecyclerView(listFromDB);
 
 

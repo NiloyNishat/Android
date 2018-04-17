@@ -7,22 +7,26 @@ import android.graphics.Bitmap;
  */
 
 public class Contact {
-    String name, phone, photoURI,emailID, updateDate;
+    String id, name, phone, photoURI,emailID, updateDate;
     Bitmap photo;
+    Boolean fromGoogle = false;
 
-    public Contact(String name, String phone, Bitmap photo) {
-        this.name = name;
-        this.phone = phone;
-        this.photo = photo;
-    }
     public Contact(String name, String phone, String photoURI) {
         this.name = name;
         this.phone = phone;
         this.photoURI = photoURI;
     }
+    public Contact(String id, String name, String phone,String photoURI, String emailID) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.photoURI = photoURI;
+        this.emailID = emailID;
+    }
     public Contact(String name, String phone,String photoURI, String emailID) {
         this.name = name;
         this.phone = phone;
+        this.photoURI = photoURI;
         this.emailID = emailID;
     }
 

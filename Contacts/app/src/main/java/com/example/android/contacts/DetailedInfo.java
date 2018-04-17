@@ -5,11 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DetailedInfo extends AppCompatActivity {
-    TextView tv_name, tv_phone;
+    TextView tv_name, tv_phone, tv_emailId;
+    View v_1;
     ImageView Im_image;
 
     @Override
@@ -32,6 +34,13 @@ public class DetailedInfo extends AppCompatActivity {
              bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
             Im_image.setImageBitmap(bmp);
         }
+        if(getIntent().getStringExtra("email") != null){
+            tv_emailId.setText(getIntent().getStringExtra("email"));
+        }
+        if(getIntent().getStringExtra("email").equals("no email") || getIntent().getStringExtra("email") == null){
+            tv_emailId.setVisibility(View.GONE);
+            v_1.setVisibility(View.GONE);
+        }
 
 //        Im_image.setImageBitmap("im_image");
     }
@@ -39,6 +48,10 @@ public class DetailedInfo extends AppCompatActivity {
     private void initialize() {
         tv_name = findViewById(R.id.d_textView_username);
         tv_phone = findViewById(R.id.d_textView_userphone);
+        tv_emailId = findViewById(R.id.d_textView_userEmail);
         Im_image = findViewById(R.id.d_user_image);
+        v_1 = findViewById(R.id.d_view3);
     }
+
+
 }
