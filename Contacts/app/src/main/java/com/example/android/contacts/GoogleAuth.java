@@ -1,21 +1,16 @@
 package com.example.android.contacts;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -24,7 +19,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -51,15 +45,9 @@ import com.google.api.services.people.v1.model.Person;
 import com.google.api.services.people.v1.model.PhoneNumber;
 import com.google.api.services.people.v1.model.Photo;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,16 +72,22 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_auth);
+        setTitle("Contact from Google");
         signInButton = findViewById(R.id.main_googlesigninbtn);
-        this.context = this;
+        context = this;
         googleDB = new GoogleDB(context);
         finalBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_user);
+
+        myRecyclerView = findViewById(R.id.googleContact_recyclerview);
+        myRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+
         signingIn();
         button_changeActivity = findViewById(R.id.button_change);
         button_changeActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, Homepage.class);
+                intent.putExtra("page", "3");
                 startActivity(intent);
             }
         });
@@ -106,7 +100,7 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
                 // The serverClientId is an OAuth 2.0 web client ID
                 .requestServerAuthCode(getString(R.string.web_clientID))
                 .requestEmail()
-                .requestScopes(new Scope(Scopes.PLUS_LOGIN),
+                .requestScopes(new Scope(Scopes.PLUS_ME),
                         new Scope(PeopleScopes.CONTACTS_READONLY),
                         new Scope(PeopleScopes.USER_PHONENUMBERS_READ),
                         new Scope(PeopleScopes.USER_EMAILS_READ),
@@ -144,8 +138,11 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
 
     public boolean deleteRecursive(File fileOrDirectory) {
         if (fileOrDirectory.isDirectory()){
-            for (File child : fileOrDirectory.listFiles())
-                deleteRecursive(child);
+            File[] fileList = fileOrDirectory.listFiles();
+           if(fileList != null){
+               for (File child : fileList)
+                   deleteRecursive(child);
+           }
         }
         return fileOrDirectory.delete();
     }
@@ -162,7 +159,7 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
                     GoogleSignInAccount acct = result.getSignInAccount();
                     Log.d("success", "onActivityResult:GET_TOKEN:success:" + result.getStatus().isSuccess());
                     // This is what we need to exchange with the server.
-                    pep = new PeoplesAsync(this);
+                    pep = new PeoplesAsync();
                     pep.execute(acct.getServerAuthCode());
 
                 } else {
@@ -237,11 +234,9 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
         List<Contact> myGoogleContact = new ArrayList<>();
 
         ProgressDialog dialogue;
-        private Activity activity;
 
-        public PeoplesAsync(Activity activity) {
+        private PeoplesAsync() {
             dialogue = new ProgressDialog(context);
-            this.activity = activity;
         }
 
         protected void onPreExecute() {
@@ -262,18 +257,17 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
                         // http://stackoverflow.com/questions/35604406/retrieving-information-about-a-contact-with-google-people-api-java
                         .setRequestMaskIncludeField("person.names,person.emailAddresses,person.phoneNumbers,person.photos")
                         .execute();
-                Log.d("response: ", response.toPrettyString());
+//                Log.d("response: ", response.toPrettyString());
                 List<Person> connections = response.getConnections();
-                List<Name> names = null;
-                List<PhoneNumber> phoneNumbers  = null;
-                List<EmailAddress> emails = null;
-                List<Photo> photos = null;
+                List<Name> names;
+                List<PhoneNumber> phoneNumbers;
+                List<EmailAddress> emails;
+                List<Photo> photos;
                 List <Contact> myList = new ArrayList<>();
 
                 for (Person person : connections) {
                     if (!person.isEmpty()) {
-                        String n = "", p = "", e = "", i = "";
-                        Bitmap bitmap = null;
+                        String n, p, e = "", i = "";
                         names = person.getNames();
                         phoneNumbers = person.getPhoneNumbers();
                         emails = person.getEmailAddresses();
@@ -286,8 +280,6 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
                             i = photos.get(0).getUrl();
                         }
                         Contact c = new Contact(n,p,i,e);
-//                        new DownloadImageTask(c).execute();
-                        c.photo = downloadPhoto(c);
                         c.fromGoogle = true;
                         myList.add(c);
                     }
@@ -301,20 +293,6 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
             return idList;
         }
 
-        private Bitmap downloadPhoto(Contact contact) {
-            Bitmap bitmap = null;
-            try {
-                InputStream in = new java.net.URL(contact.photoURI).openStream();
-                bitmap = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return bitmap;
-
-        }
-
-
         @Override
         protected void onPostExecute(List<String> strings) {
             super.onPostExecute(strings);
@@ -327,14 +305,13 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
         }
 
         private void setRecyclerView() {
-            myRecyclerView = findViewById(R.id.googleContact_recyclerview);
-            myRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            myRecyclerView.setAdapter(recylcerViewAdapter);
-
             recylcerViewAdapter = new RecylcerViewAdapter(context, contactList);
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(context);
-            myRecyclerView.setLayoutManager(mLayoutManager);
             myRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//            myRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 0);
+            myRecyclerView.setHasFixedSize(true);
+            myRecyclerView.setItemViewCacheSize(contactList.size());
+            myRecyclerView.setDrawingCacheEnabled(true);
+            myRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
             myRecyclerView.setAdapter(recylcerViewAdapter);
         }
 
@@ -344,32 +321,6 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
             googleDB.insert(myGoogleContact);
         }
 
-    }
-    private class DownloadImageTask extends AsyncTask<String, Void, Void> {
-        Contact contact;
-        Bitmap bitmap;
-
-        public DownloadImageTask(Contact contact) {
-            this.contact = contact;
-        }
-
-        protected Void doInBackground(String... urls) {
-            String urldisplay = contact.photoURI;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                bitmap = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            contact.photo = bitmap;
-        }
     }
 
 

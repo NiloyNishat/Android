@@ -2,7 +2,6 @@ package com.example.android.contacts;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,7 +13,7 @@ public class SplashScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-        splashImage = (ImageView) findViewById(R.id.splash_imageView);
+        splashImage = findViewById(R.id.splash_imageView);
         Animation splashAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_transition);
         splashImage.startAnimation(splashAnimation);
         final Intent intent = new Intent(this, Homepage.class);

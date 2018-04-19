@@ -1,6 +1,5 @@
 package com.example.android.contacts;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +51,12 @@ public class DetailedInfo extends AppCompatActivity {
         Im_image = findViewById(R.id.d_user_image);
         v_1 = findViewById(R.id.d_view3);
     }
-
+//
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(this, Homepage.class);
+//        startActivity(intent);
+//    }
 
 }

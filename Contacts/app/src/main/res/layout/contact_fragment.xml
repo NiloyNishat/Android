@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/editText_search"
+        android:id="@+id/editText_search_conFR"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:drawablePadding="15dp"
@@ -19,8 +19,8 @@
 
     <Button
         android:id="@+id/button_getContact"
-        android:layout_width="100dp"
-        android:layout_height="35dp"
+        android:layout_width="175dp"
+        android:layout_height="45dp"
         android:layout_gravity="right"
         android:text="Refresh Contact"/>
 

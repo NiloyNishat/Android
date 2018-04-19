@@ -6,12 +6,27 @@
     android:layout_height="match_parent"
     android:background="@color/colorbackground">
 
+    <EditText
+        android:id="@+id/editText_search_cllFR"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:drawablePadding="15dp"
+        android:drawableRight="@drawable/ic_search"
+        android:textColor="@color/colorWhite"
+        android:hint="Enter a name..."
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:textColorHint="@color/colorLight"
+        android:background="@color/colorDamn"
+        />
+
+
     <Button
         android:id="@+id/button_get_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Get Google Contacts"
-        android:layout_gravity="center"/>
+        android:layout_gravity="right"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/call_recyclerview"

@@ -3,11 +3,9 @@ package com.example.android.contacts;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +20,8 @@ public class ContactDB extends SQLiteOpenHelper {
     private static final String COL3 = "photo_url";
     private static final String COL4 = "email_id";
     private static final String COL5 = "updateDate";
-    Context context;
-    SQLiteDatabase db;
+    private Context context;
+    private SQLiteDatabase db;
 
     private static final String TABLE_CREATE = "create table " + TABLE_NAME +
             " (id integer primary key AUTOINCREMENT, " +
@@ -56,11 +54,11 @@ public class ContactDB extends SQLiteOpenHelper {
     public void insert(List<Contact> myContactList){
         db = this.getWritableDatabase();
         FragmentContacts.hasDB = true;
-        ContentValues values = null;
+        deleteAllfromTable();
+        ContentValues values;
 
         for(int i=0; i<myContactList.size(); i++) {
             values = new ContentValues();
-            Log.d("name",  myContactList.get(i).name);
             values.put(COL1, myContactList.get(i).name);
             values.put(COL2, myContactList.get(i).phone);
             values.put(COL3, myContactList.get(i).photoURI);
@@ -86,6 +84,7 @@ public class ContactDB extends SQLiteOpenHelper {
                 res.add(contact);
             }while (cursor.moveToNext());
         }
+        cursor.close();
 
         return res;
     }

@@ -5,19 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +41,7 @@ public class GoogleDB extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(TABLE_CREATE);
         this.db = sqLiteDatabase;
 
+
     }
 
     @Override
@@ -64,7 +53,7 @@ public class GoogleDB extends SQLiteOpenHelper {
 
     public void insert(List<Contact> myContactList){
         db = this.getWritableDatabase();
-        ContentValues values = null;
+        ContentValues values;
 
         for(int i=0; i<myContactList.size(); i++) {
             values = new ContentValues();
@@ -96,7 +85,7 @@ public class GoogleDB extends SQLiteOpenHelper {
 
             }while (cursor.moveToNext());
         }
-
+        cursor.close();
         return res;
     }
 

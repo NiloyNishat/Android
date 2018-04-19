@@ -1,13 +1,14 @@
 package com.example.android.contacts;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -42,40 +43,62 @@ public class FragmentContacts extends Fragment {
     EditText et_search;
     Button bt_getContact;
     ContactDB contactDB;
+    Boolean permissionTaken = false;
+
+    Context context;
+    Activity activity;
 
     public FragmentContacts() {
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.contact_fragment, container, false);
+        initiallizing();
+
+        refreshContact();
+        applySearchOption();
+        permissionTaken = check();
+        Log.d("permission", Boolean.toString(permissionTaken));
+        if(permissionTaken) {
+            if (!contactDB.doesTableExist()) {
+                getContactList();
+            }
+
+            listFromDB = contactDB.getAllData();
+            if (listFromDB.size() == 0) {
+                getContactList();
+            }
+            listFromDB = contactDB.getAllData();
+            handleRecyclerView(listFromDB);
+        }
+
+        return v;
+    }
+
+    private void initiallizing() {
+        context = getContext();
+        activity = getActivity();
+
         myContactList = new ArrayList<>();
-        et_search = v.findViewById(R.id.editText_search);
+        et_search = v.findViewById(R.id.editText_search_conFR);
         bt_getContact = v.findViewById(R.id.button_getContact);
         contactDB = new ContactDB(getContext());
         hasDB = contactDB.doesTableExist();
-        refreshContact();
-        applySearchOption();
-        if(!hasDB){
-            check();
-        }
-
-        listFromDB = contactDB.getAllData();
-
-        handleRecyclerView(listFromDB);
-
-
-        return v;
     }
 
     private void handleRecyclerView(List<Contact> listFromDB) {
         myRecyclerView = v.findViewById(R.id.contact_recyclerview);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recylcerViewAdapter = new RecylcerViewAdapter(getContext(), listFromDB);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        myRecyclerView.setLayoutManager(mLayoutManager);
+
         myRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        myRecyclerView.setHasFixedSize(true);
+        myRecyclerView.setItemViewCacheSize(listFromDB.size());
+        myRecyclerView.setDrawingCacheEnabled(true);
+        myRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+
         myRecyclerView.setAdapter(recylcerViewAdapter);
     }
 
@@ -86,9 +109,11 @@ public class FragmentContacts extends Fragment {
                 myContactList = new ArrayList<>();
                 listFromDB = new ArrayList<>();
                 contactDB.deleteAllfromTable();
-                check();
-                handleRecyclerView(listFromDB);
-//                v.refreshDrawableState();
+                if(permissionTaken) {
+                    getContactList();
+                    listFromDB = contactDB.getAllData();
+                    handleRecyclerView(listFromDB);
+                }
             }
         });
     }
@@ -112,7 +137,7 @@ public class FragmentContacts extends Fragment {
 
             private void filter(String s) {
                 s = s.toLowerCase();
-                ArrayList<Contact> newList = new ArrayList<>();
+                List<Contact> newList = new ArrayList<>();
 
                 for(Contact contact : listFromDB){
                     String name = contact.name.toLowerCase();
@@ -128,9 +153,9 @@ public class FragmentContacts extends Fragment {
 
 
     private void getContactList() {
-        Cursor cursor = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+        Cursor cursor = activity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                 null, null, null, null);
-        getActivity().startManagingCursor(cursor);
+        activity.startManagingCursor(cursor);
 
         if (cursor != null && cursor.moveToFirst() ) {
             try {
@@ -150,48 +175,30 @@ public class FragmentContacts extends Fragment {
                 }
             }catch (IllegalArgumentException e) {
                 Log.e("error ==", e.getMessage());
-            } finally {
-                try {
-                    if (!cursor.isClosed()) {
-                        Log.d("cursor: ", "closed");
-                        cursor.close();
-                    }
-                    cursor = null;
-                } catch (Exception e) {
-                    Log.e("While closing cursor", e.getMessage());
-                }
             }
         }
         contactDB.insert( myContactList);
-        Log.d("ContactListLength: ", Integer.toString(myContactList.size()));
+//        Log.d("ContactListLength: ", Integer.toString(myContactList.size()));
     }
 
 
 
-    private void check(){
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS)
+    private boolean check(){
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_CONTACTS)
                 == PackageManager.PERMISSION_GRANTED) {
-            Handler mHandler = new Handler(Looper.getMainLooper());
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    getContactList();
-
-                }
-            });
-//            Thread thread = new Thread(r);
-//            thread.start();
+            return true;
         }else{
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS)) {
                     Toast.makeText(getActivity(), "Read contacts permission is required to function app correctly", Toast.LENGTH_LONG).show();
                 }else {
-                    ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{Manifest.permission.READ_CONTACTS},
-                            1);                }
-
+                    ActivityCompat.requestPermissions(activity,
+                            new String[]{Manifest.permission.READ_CONTACTS}, 1);
+                }
+                return true;
             }
         }
+        return false;
     }
 
 
