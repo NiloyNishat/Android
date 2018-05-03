@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorbackground">
+    android:background="@color/colorWhite"
+    >
 
     <LinearLayout
         android:id="@+id/layout_reguler"
@@ -12,101 +13,122 @@
         android:orientation="vertical"
         android:layout_gravity="center"
         android:gravity="center_horizontal"
+        android:visibility="visible"
+        android:weightSum="3"
         >
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="50dp"
-            android:src="@drawable/ic_face"
-            android:background="@drawable/circle"/>
-
-        <TextView
-            android:id="@+id/textView_username"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:hint="Your Name"
-            android:textColorHint="@color/colorWhite"
-            android:textSize="20sp"
-            android:gravity="center_vertical"
-            android:drawablePadding="10dp"
-            android:ems="10"
-            android:drawableLeft="@drawable/ic_user"
-            android:drawableTint="@color/colorPrimary"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:background="@color/colorbackground"
+            android:layout_margin="10dp"
+            android:gravity="center|bottom">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_face"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/circle"/>
+        </LinearLayout>
 
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/colorWhite"/>
-
-        <TextView
-            android:id="@+id/textView_userphone"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:ems="10"
-            android:hint="Your Number"
-            android:textColorHint="@color/colorWhite"
-            android:textSize="20sp"
-            android:gravity="center_vertical"
-            android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/ic_call"
-            android:drawableTint="@color/colorPrimary"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/colorWhite"/>
-
-        <TextView
-            android:id="@+id/textView_useremail"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:ems="10"
-            android:hint="Your Email"
-            android:textColorHint="@color/colorWhite"
-            android:textSize="20sp"
-            android:gravity="center_vertical"
-            android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/ic_mail"
-            android:drawableTint="@color/colorPrimary"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/colorWhite"/>
-
-        <android.support.design.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/button_edit"
-                android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:layout_gravity="center|bottom"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ScrollView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="20dp"
-                android:src="@drawable/ic_edit"
-                android:tint="@color/colorbackground"
-                />
-        </android.support.design.widget.CoordinatorLayout>
+                android:background="@color/colorbackground"
+                android:layout_margin="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/textView_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:hint="Your Name"
+                        android:textColorHint="@color/colorWhite"
+                        android:textSize="20sp"
+                        android:gravity="center_vertical"
+                        android:drawablePadding="10dp"
+                        android:ems="10"
+                        android:drawableLeft="@drawable/ic_user"
+                        android:drawableTint="@color/colorPrimary"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@color/colorWhite"/>
+
+                    <TextView
+                        android:id="@+id/textView_userphone"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:ems="10"
+                        android:hint="Your Number"
+                        android:textColorHint="@color/colorWhite"
+                        android:textSize="20sp"
+                        android:gravity="center_vertical"
+                        android:drawablePadding="10dp"
+                        android:drawableLeft="@drawable/ic_call"
+                        android:drawableTint="@color/colorPrimary"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@color/colorWhite"/>
+
+                    <TextView
+                        android:id="@+id/textView_useremail"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:ems="10"
+                        android:hint="Your Email"
+                        android:textColorHint="@color/colorWhite"
+                        android:textSize="20sp"
+                        android:gravity="center_vertical"
+                        android:drawablePadding="10dp"
+                        android:drawableLeft="@drawable/ic_mail"
+                        android:drawableTint="@color/colorPrimary"/>
+
+                </LinearLayout>
+
+            </ScrollView>
+            <android.support.design.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/button_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="20dp"
+                    android:src="@drawable/ic_edit"
+                    android:tint="@color/colorbackground"
+                    />
+            </android.support.design.widget.CoordinatorLayout>
+        </LinearLayout>
 
 
     </LinearLayout>
@@ -118,100 +140,139 @@
         android:orientation="vertical"
         android:layout_gravity="center"
         android:gravity="center_horizontal"
+        android:weightSum="3"
         android:visibility="gone"
         >
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="50dp"
-            android:src="@drawable/ic_face"
-            android:background="@drawable/circle"/>
-
-        <EditText
-            android:id="@+id/editText_username"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:hint="Your Name"
-            android:textColorHint="@color/colorWhite"
-            android:background="@android:color/transparent"
-            android:ems="10"
-            android:gravity="center_vertical"
-            android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/ic_user"
-            android:drawableTint="@color/colorPrimary"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:background="@color/colorbackground"
+            android:layout_margin="10dp"
+            android:layout_marginBottom="0dp"
+            android:gravity="center|bottom">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_face"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/circle"/>
+        </LinearLayout>
 
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:layout_gravity="center|bottom"
+            android:background="@color/colorbackground"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/colorWhite"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
 
-        <EditText
-            android:id="@+id/editText_userphone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:hint="Your Number"
-            android:background="@android:color/transparent"
-            android:ems="10"
-            android:textColorHint="@color/colorWhite"
-            android:gravity="center_vertical"
-            android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/ic_call"
-            android:drawableTint="@color/colorPrimary"
-            android:inputType="number"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/colorWhite"/>
+                    <EditText
+                        android:id="@+id/editText_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:hint="Your Name"
+                        android:textColorHint="@color/colorWhite"
+                        android:background="@android:color/transparent"
+                        android:ems="10"
+                        android:gravity="center_vertical"
+                        android:drawablePadding="10dp"
+                        android:drawableLeft="@drawable/ic_user"
+                        android:drawableTint="@color/colorPrimary"/>
 
-        <EditText
-            android:id="@+id/editText_useremail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@android:color/transparent"
-            android:ems="10"
-            android:hint="Your Email"
-            android:textColorHint="@color/colorWhite"
-            android:gravity="center_vertical"
-            android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/ic_mail"
-            android:drawableTint="@color/colorPrimary"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@color/colorWhite"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@color/colorWhite"/>
+                    <EditText
+                        android:id="@+id/editText_userphone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:hint="Your Number"
+                        android:background="@android:color/transparent"
+                        android:ems="10"
+                        android:textColorHint="@color/colorWhite"
+                        android:gravity="center_vertical"
+                        android:drawablePadding="10dp"
+                        android:drawableLeft="@drawable/ic_call"
+                        android:drawableTint="@color/colorPrimary"
+                        android:inputType="number"/>
 
-        <Button
-            android:id="@+id/button_submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Submit"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:background="@drawable/rounded_button"
-            android:backgroundTint="@color/colorWhite"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@color/colorWhite"/>
+
+                    <EditText
+                        android:id="@+id/editText_useremail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@android:color/transparent"
+                        android:ems="10"
+                        android:hint="Your Email"
+                        android:textColorHint="@color/colorWhite"
+                        android:gravity="center_vertical"
+                        android:drawablePadding="10dp"
+                        android:drawableLeft="@drawable/ic_mail"
+                        android:drawableTint="@color/colorPrimary"/>
+
+                    <Button
+                        android:id="@+id/button_submit"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:text="Submit"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/rounded_button"
+                        android:backgroundTint="@color/colorWhite"/>
+                    <Button
+                        android:id="@+id/button_back"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:text="Go Back"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:textColor="@color/colorWhite"
+                        android:background="@drawable/rounded_button"
+                        android:backgroundTint="@color/colorPrimaryDark"/>
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
 
 
     </LinearLayout>

@@ -71,8 +71,6 @@ public class FragmentCall extends Fragment {
         return v;
     }
 
-
-
     private void initializing() {
         context = getContext();
         activity = getActivity();
@@ -81,6 +79,12 @@ public class FragmentCall extends Fragment {
         googleDB = new GoogleDB(context);
         myRecyclerView = v.findViewById(R.id.call_recyclerview);
         et_search = v.findViewById(R.id.editText_search_cllFR);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setContact();
     }
 
     private void setContact() {
@@ -121,7 +125,7 @@ public class FragmentCall extends Fragment {
     }
 
     private void checkGoogleButton() {
-        if(googleDB.doesTableExist()){
+        if(listFromDB != null && listFromDB.size() == 0){
             bt_getGoogle.setText("Reload from Google");
         }
         else{
@@ -167,7 +171,7 @@ public class FragmentCall extends Fragment {
 
         try{
             out = new FileOutputStream(file);
-            contact.photo.compress(Bitmap.CompressFormat.PNG, 50, out);
+            if(contact.photo != null) contact.photo.compress(Bitmap.CompressFormat.PNG, 50, out);
             out.flush();
             out.close();
         }catch (FileNotFoundException e){

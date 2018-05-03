@@ -36,22 +36,44 @@ public class Homepage extends AppCompatActivity{
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_contact);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_web);
 
-        if(getIntent().getStringExtra("page") != null && getIntent().getStringExtra("page").equals("3")){
-            viewPager.setCurrentItem(2,true);
-        }
-        else{
-            viewPager.setCurrentItem(0,true);
-        }
+        viewPager.setCurrentItem(0,true);
 
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (position == 1) {
+                    setTitle("Contact from Phone");
+                } else if (position == 2)
+                {
+                    setTitle("Contact from Google");
+                }
+                else
+                {
+                    setTitle("My Contact");
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
+
 
     @Override
     public void onBackPressed() {
-        FileUtils.deleteQuietly(this.getCacheDir());
-        Intent a = new Intent(Intent.ACTION_MAIN);
-        a.addCategory(Intent.CATEGORY_HOME);
-        a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(a);
+//        FileUtils.deleteQuietly(this.getCacheDir());
+//        Intent a = new Intent(Intent.ACTION_MAIN);
+//        a.addCategory(Intent.CATEGORY_HOME);
+//        a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(a);
         finish();
     }
 

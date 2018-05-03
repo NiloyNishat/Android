@@ -19,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -64,7 +65,6 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
     static RecylcerViewAdapter recylcerViewAdapter;
     static List <Contact> contactList = new ArrayList<>();
     Bitmap finalBitmap;
-    Button button_changeActivity;
     GoogleDB googleDB;
 
 
@@ -82,15 +82,6 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
         myRecyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         signingIn();
-        button_changeActivity = findViewById(R.id.button_change);
-        button_changeActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(context, Homepage.class);
-                intent.putExtra("page", "3");
-                startActivity(intent);
-            }
-        });
     }
 
 
@@ -118,6 +109,7 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
             @Override
             public void onClick(View v) {
                 getIdToken();
+
             }
             private void getIdToken() {
                 // Shows an account picker to let the user choose a Google account from the device.
@@ -128,8 +120,6 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
                 File path = Environment.getExternalStorageDirectory();
                 File dir = new File(path + "/myContact");
                 boolean deleted = deleteRecursive(dir);
-                if(deleted) Log.d("myContact", "folder deleted");
-                if(!deleted) Log.d("myContact", "folder could not delete");
 
             }
         });
@@ -257,7 +247,7 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
                         // http://stackoverflow.com/questions/35604406/retrieving-information-about-a-contact-with-google-people-api-java
                         .setRequestMaskIncludeField("person.names,person.emailAddresses,person.phoneNumbers,person.photos")
                         .execute();
-//                Log.d("response: ", response.toPrettyString());
+                Log.d("response: ", response.toPrettyString());
                 List<Person> connections = response.getConnections();
                 List<Name> names;
                 List<PhoneNumber> phoneNumbers;
@@ -295,6 +285,8 @@ public class GoogleAuth extends AppCompatActivity  implements GoogleApiClient.On
 
         @Override
         protected void onPostExecute(List<String> strings) {
+            Toast.makeText(context, "Contact list is fetched!", Toast.LENGTH_LONG).show();
+
             super.onPostExecute(strings);
             if ( dialogue!=null && dialogue.isShowing() ){
                 dialogue.dismiss();

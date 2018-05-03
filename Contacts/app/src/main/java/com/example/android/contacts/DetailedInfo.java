@@ -49,7 +49,7 @@ public class DetailedInfo extends AppCompatActivity {
         tv_phone = findViewById(R.id.d_textView_userphone);
         tv_emailId = findViewById(R.id.d_textView_userEmail);
         Im_image = findViewById(R.id.d_user_image);
-        v_1 = findViewById(R.id.d_view3);
+        v_1 = findViewById(R.id.d_view2);
     }
 //
 //    @Override

@@ -29,7 +29,7 @@ public class FragmentUser extends Fragment{
     View v;
     private TextView tv_name, tv_phone, tv_email;
     private EditText et_name, et_phone, et_email;
-    private Button bt_submit;
+    private Button bt_submit, bt_back;
     private FloatingActionButton fb_edit;
     private LinearLayout ll_regular, ll_edit;
     private String FILE_NAME="test.txt";
@@ -52,8 +52,19 @@ public class FragmentUser extends Fragment{
         readFromFile();
         editButtonClick();
         submitButtonClick();
+        goBackButton();
 
         return v;
+    }
+
+    private void goBackButton() {
+        bt_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ll_regular.setVisibility(View.VISIBLE);
+                ll_edit.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void submitButtonClick() {
@@ -137,6 +148,7 @@ public class FragmentUser extends Fragment{
         et_email =  v.findViewById(R.id.editText_useremail);
         fb_edit = v.findViewById(R.id.button_edit);
         bt_submit =  v.findViewById(R.id.button_submit);
+        bt_back =  v.findViewById(R.id.button_back);
         ll_regular =  v.findViewById(R.id.layout_reguler);
         ll_edit = v.findViewById(R.id.layout_edit);
     }

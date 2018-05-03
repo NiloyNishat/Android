@@ -26,8 +26,13 @@
         <activity
             android:name=".Homepage"
              />
-        <activity android:name=".DetailedInfo" />
-        <activity android:name=".GoogleAuth"></activity>
+        <activity android:name=".DetailedInfo"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".GoogleAuth"
+            >
+
+        </activity>
     </application>
 
 </manifest>

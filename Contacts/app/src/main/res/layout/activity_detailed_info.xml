@@ -6,100 +6,113 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.contacts.DetailedInfo"
     android:orientation="vertical"
-    android:background="@color/colorbackground">
+    android:weightSum="2"
+    android:background="@color/colorWhite">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:background="@color/colorDamn"
+        android:background="@color/colorPrimary"
+        android:layout_weight="1"
         >
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/d_user_image"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="175dp"
+            android:layout_height="175dp"
+            android:layout_marginBottom="20dp"
             android:padding="5dp"
-            android:layout_gravity="center"
+            android:layout_gravity="center|bottom"
             android:background="@drawable/circle"
             android:src="@drawable/ic_user_large"/>
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/d_textView_username"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:hint="Your Name"
-        android:textColorHint="@color/colorWhite"
-        android:textSize="20sp"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
-        android:ems="10"
-        android:drawableLeft="@drawable/ic_user"
-        android:drawableTint="@color/colorPrimary"/>
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/colorWhite"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorbackground"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            >
+            <TextView
+                android:id="@+id/d_textView_username"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="Your Name"
+                android:textColorHint="@color/colorWhite"
+                android:textSize="20sp"
+                android:gravity="center_vertical"
+                android:drawablePadding="10dp"
+                android:ems="10"
+                android:drawableLeft="@drawable/ic_user"
+                android:drawableTint="@color/colorPrimary"/>
 
-    <TextView
-        android:id="@+id/d_textView_userphone"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:ems="10"
-        android:hint="Your Number"
-        android:textColorHint="@color/colorWhite"
-        android:textSize="20sp"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
-        android:drawableLeft="@drawable/ic_call"
-        android:drawableTint="@color/colorPrimary"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/colorWhite"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/colorWhite"/>
+            <TextView
+                android:id="@+id/d_textView_userphone"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:ems="10"
+                android:hint="Your Number"
+                android:textColorHint="@color/colorWhite"
+                android:textSize="20sp"
+                android:gravity="center_vertical"
+                android:drawablePadding="10dp"
+                android:drawableLeft="@drawable/ic_call"
+                android:drawableTint="@color/colorPrimary"/>
 
-    <TextView
-        android:id="@+id/d_textView_userEmail"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:ems="10"
-        android:hint="Your Email"
-        android:textColorHint="@color/colorWhite"
-        android:textSize="20sp"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
-        android:drawableLeft="@drawable/ic_mail"
-        android:drawableTint="@color/colorPrimary"/>
+            <View
+                android:id="@+id/d_view2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/colorWhite"/>
 
-    <View
-        android:id="@+id/d_view3"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/colorWhite"/>
+            <TextView
+                android:id="@+id/d_textView_userEmail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:ems="10"
+                android:hint="Your Email"
+                android:textColorHint="@color/colorWhite"
+                android:textSize="20sp"
+                android:gravity="center_vertical"
+                android:drawablePadding="10dp"
+                android:drawableLeft="@drawable/ic_mail"
+                android:drawableTint="@color/colorPrimary"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </LinearLayout>

@@ -114,6 +114,7 @@ public class FragmentContacts extends Fragment {
                     listFromDB = contactDB.getAllData();
                     handleRecyclerView(listFromDB);
                 }
+                Toast.makeText(context, "Contact list is reloaded!", Toast.LENGTH_LONG).show();
             }
         });
     }
