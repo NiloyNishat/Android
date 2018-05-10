@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Safe Home</string>
+    <string name="err_msg_name">Invalid username</string>
+    <string name="err_msg_password">Invalid password</string>
+</resources>
