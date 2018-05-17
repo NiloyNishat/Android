@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class SignIn extends Activity {
+public class SignIn extends AppCompatActivity {
 
     private ImageView bg1_iv, bg2_iv;
     private Button signIn_bt;
@@ -100,8 +100,10 @@ public class SignIn extends Activity {
 
         Toast.makeText(getApplicationContext(), "Successful!", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(this, Homepage.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        et_username.setText(null);
+        et_password.setText(null);
     }
 
     private boolean validateUsername() {

@@ -7,8 +7,8 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Build;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -25,7 +25,7 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.util.Calendar;
 
-public class SignUp extends Activity implements DatePickerDialog.OnDateSetListener{
+public class SignUp extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     private ImageView bg1_iv, bg2_iv;
     private Button bt_request;
     private EditText et_firstName, et_LastName, et_email, et_occupation, et_contactNo, et_username, et_dateFrom, et_dateTo;
@@ -172,7 +172,7 @@ public class SignUp extends Activity implements DatePickerDialog.OnDateSetListen
 
         Toast.makeText(getApplicationContext(), "Successful!", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(this, Homepage.class);
+        Intent intent = new Intent(this, EntryPage.class);
         startActivity(intent);
     }
     private boolean validateRentFrom() {

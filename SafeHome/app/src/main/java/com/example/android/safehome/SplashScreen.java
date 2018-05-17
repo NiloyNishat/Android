@@ -3,10 +3,9 @@ package com.example.android.safehome;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.support.v7.app.AppCompatActivity;
 
-public class SplashScreen extends Activity {
+public class SplashScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +14,7 @@ public class SplashScreen extends Activity {
 //        splashImage = findViewById(R.id.splash_imageView);
 //        Animation splashAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_transition);
 //        splashImage.startAnimation(splashAnimation);
-        final Intent intent = new Intent(this, Homepage.class);
+        final Intent intent = new Intent(this, EntryPage.class);
 
         Thread myThread = new Thread(){
             @Override

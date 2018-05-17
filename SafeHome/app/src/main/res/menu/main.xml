@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    >
+
+    <item
+        android:id="@+id/action_entranceLog"
+        android:orderInCategory="100"
+        android:title="Entrance Log"
+        android:icon="@drawable/entrance_log"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/action_passkeySettings"
+        android:orderInCategory="101"
+        android:title="Passkey Settings"
+        android:icon="@drawable/passkey_reset"
+        app:showAsAction="never"
+
+        />
+    <item
+        android:id="@+id/action_lockBatteryAlert"
+        android:orderInCategory="102"
+        android:title="Lock Battery Alert"
+        android:icon="@drawable/lock_battery_full"
+        app:showAsAction="never"
+
+        />
+</menu>

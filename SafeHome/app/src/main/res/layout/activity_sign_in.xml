@@ -50,7 +50,7 @@
                 android:singleLine="true"
                 android:inputType="textPersonName"
                 android:drawablePadding="10dp"
-                android:drawableLeft="@drawable/ic_mail_24dp"
+                android:drawableLeft="@drawable/username_icon"
                 android:textStyle="bold"
                 android:ems="10"
                 android:hint="Username"/>
@@ -76,7 +76,7 @@
                 android:inputType="textPassword"
                 android:drawablePadding="10dp"
                 android:textStyle="bold"
-                android:drawableLeft="@drawable/ic_lock_24dp"
+                android:drawableLeft="@drawable/password_icon"
                 android:hint="Password"/>
 
         </android.support.design.widget.TextInputLayout>

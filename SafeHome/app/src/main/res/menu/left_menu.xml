@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tool="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item android:title="Analytics &amp; Activity">
+        <menu>
+            <item
+                android:id="@+id/item0"
+                android:title="Power Analytic"
+                android:icon="@drawable/nav_power_analytics_icon"/>
+
+            <item
+                android:id="@+id/item1"
+                android:title="Bill Management"
+                android:icon="@drawable/nav_bill_management_icon"/>
+        </menu>
+
+    </item>
+
+    <item android:title="Help &amp; Settings">
+        <menu>
+            <item
+                android:id="@+id/item3"
+                android:title="Language"
+                android:icon="@drawable/nav_language_icon"/>
+
+            <item
+                android:id="@+id/item4"
+                android:title="Account Settings"
+                android:icon="@drawable/nav_account_settings_icon"/>
+
+            <item
+                android:id="@+id/item5"
+                android:title="Help Center"
+                android:icon="@drawable/nav_help_center_icon"/>
+
+            <item
+                android:id="@+id/item6"
+                android:title="Terms &amp; Policies"
+                android:icon="@drawable/nav_terms_policies_icon"/>
+
+            <item
+                android:id="@+id/item7"
+                android:title="About"
+                android:icon="@drawable/nav_about_icon"/>
+
+            <item
+                android:id="@+id/item8"
+                android:title="Change Password"
+                android:icon="@drawable/nav_about_icon"/>
+
+            <item
+                android:id="@+id/item9"
+                android:title="Log Out"
+                android:icon="@drawable/nav_logout_icon"/>
+        </menu>
+
+    </item>
+
+
+</menu>

@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity"
+    android:clickable="true"
+    android:focusable="true"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/down_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:gravity="top">
+
+            <pl.droidsonroids.gif.GifImageButton
+                android:id="@+id/gif_down_arrow"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                android:layout_width="30dp"
+                android:background="@android:color/transparent"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/arrow_down"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#2306183d"
+                android:layout_below="@+id/gif_down_arrow"
+                android:layout_marginBottom="5dp"/>
+
+        </RelativeLayout>
+
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="My Apartment Status"
+                    android:textSize="17dp"
+                    android:textColor="@android:color/black"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:padding="10dp"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:weightSum="3">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/bg_box"/>
+
+                        <ImageView
+                            android:id="@+id/im_airConditioner"
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:padding="10dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/my_apartment_air_conditioner_on"/>
+
+                        <TextView
+                            android:id="@+id/tv_airConditioner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="Air Cond. On"
+                            android:padding="10dp"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/bg_box"/>
+
+                        <ImageView
+                            android:id="@+id/im_light"
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:padding="10dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/my_apartment_light_bulb_on"/>
+
+                        <TextView
+                            android:id="@+id/tv_light"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="Light On"
+                            android:padding="10dp"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/bg_box"/>
+
+                        <ImageView
+                            android:id="@+id/im_socket"
+                            android:layout_width="75dp"
+                            android:layout_height="75dp"
+                            android:padding="10dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/my_apartment_socket_off"/>
+
+                        <TextView
+                            android:id="@+id/tv_socket"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="Socket Off"
+                            android:padding="10dp"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Shared Appliances"
+                    android:textSize="17dp"
+                    android:textColor="@android:color/black"/>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:padding="10dp"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:weightSum="3">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/bg_box"/>
+
+                        <ImageView
+                            android:id="@+id/iv_kettle"
+                            android:layout_width="75dp"
+                            android:layout_height="50dp"
+                            android:paddingBottom="10dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/shared_appliances_kettle_unavailable"/>
+
+                        <TextView
+                            android:id="@+id/tv_kettle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="Kettle"
+                            android:padding="10dp"/>
+
+
+                        <ImageView
+                            android:id="@+id/dot_kettle"
+                            android:layout_width="15dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/red_dot"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/bg_box"/>
+
+                        <ImageView
+                            android:id="@+id/iv_oven"
+                            android:layout_width="75dp"
+                            android:layout_height="50dp"
+                            android:paddingBottom="10dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/shared_appliances_oven_unavailable"/>
+
+                        <TextView
+                            android:id="@+id/tv_oven"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="Oven"
+                            android:padding="10dp"/>
+
+
+                        <ImageView
+                            android:id="@+id/dot_oven"
+                            android:layout_width="15dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/red_dot"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/bg_box"/>
+
+                        <ImageView
+                            android:id="@+id/iv_riceCooker"
+                            android:layout_width="75dp"
+                            android:layout_height="50dp"
+                            android:paddingBottom="10dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/shared_appliances_rice_cooker_unavailable"/>
+
+                        <TextView
+                            android:id="@+id/tv_riceCooker"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="Rice Cooker"
+                            android:padding="10dp"/>
+
+
+                        <ImageView
+                            android:id="@+id/dot_riceCooker"
+                            android:layout_width="15dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/red_dot"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:padding="10dp"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:weightSum="3">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/bg_box"/>
+
+                        <ImageView
+                            android:id="@+id/iv_stove"
+                            android:layout_width="75dp"
+                            android:layout_height="50dp"
+                            android:paddingBottom="10dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/shared_appliances_stove_unavailable"/>
+
+                        <TextView
+                            android:id="@+id/tv_stove"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="Stove"
+                            android:padding="10dp"/>
+
+
+                        <ImageView
+                            android:id="@+id/dot_stove"
+                            android:layout_width="15dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/red_dot"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/bg_box"/>
+
+                        <ImageView
+                            android:id="@+id/iv_washingmachine"
+                            android:layout_width="75dp"
+                            android:layout_height="50dp"
+                            android:paddingBottom="10dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/shared_appliances_washing_machine_unavailable"/>
+
+                        <TextView
+                            android:id="@+id/tv_washingmachine"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="Washing M."
+                            android:padding="10dp"/>
+
+
+                        <ImageView
+                            android:id="@+id/dot_washingmachine"
+                            android:layout_width="15dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/red_dot"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/bg_box"/>
+
+                        <ImageView
+                            android:id="@+id/iv_waterHeater"
+                            android:layout_width="75dp"
+                            android:layout_height="50dp"
+                            android:paddingBottom="10dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/shared_appliances_water_heater_unavailable"/>
+
+                        <TextView
+                            android:id="@+id/tv_waterHeater"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="Water Heater"
+                            android:padding="10dp"/>
+
+
+                        <ImageView
+                            android:id="@+id/dot_waterHeater"
+                            android:layout_width="15dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/red_dot"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rest Rooms"
+                    android:textSize="17dp"
+                    android:textColor="@android:color/black"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:padding="10dp"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:weightSum="3">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/bg_box"/>
+
+                        <ImageView
+                            android:id="@+id/iv_shower"
+                            android:layout_width="75dp"
+                            android:layout_height="50dp"
+                            android:paddingBottom="10dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/shared_rooms_shower_unavailable"/>
+
+                        <TextView
+                            android:id="@+id/tv_shower"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="Shower Room"
+                            android:padding="10dp"/>
+
+
+                        <ImageView
+                            android:id="@+id/dot_shower"
+                            android:layout_width="15dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/red_dot"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/bg_box"/>
+
+                        <ImageView
+                            android:id="@+id/iv_toilet"
+                            android:layout_width="75dp"
+                            android:layout_height="50dp"
+                            android:paddingBottom="10dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/shared_rooms_toilet_unavailable"/>
+
+                        <TextView
+                            android:id="@+id/tv_toilet"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:gravity="center"
+                            android:text="Toilet"
+                            android:padding="10dp"/>
+
+
+                        <ImageView
+                            android:id="@+id/dot_toilet"
+                            android:layout_width="15dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginRight="15dp"
+                            android:src="@drawable/red_dot"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+
+
+

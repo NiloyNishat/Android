@@ -55,7 +55,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:textColor="@color/colorWhite"
-            android:background="@drawable/rounded_button_transparent_blueline"
+            android:background="@drawable/req_btn_bg"
             />
 
         <Button
@@ -69,7 +69,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:textColor="@color/colorWhite"
-            android:background="@drawable/rounded_button_skyblue"
+            android:background="@drawable/login_btn_bg"
             />
     </LinearLayout>
 
