@@ -102,8 +102,6 @@ public class SignIn extends AppCompatActivity {
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        et_username.setText(null);
-        et_password.setText(null);
     }
 
     private boolean validateUsername() {

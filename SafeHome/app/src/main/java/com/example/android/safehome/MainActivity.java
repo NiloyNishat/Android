@@ -5,6 +5,8 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Color;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -32,15 +34,22 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.skyfishjy.library.RippleBackground;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    private ImageView bg1_iv, bg2_iv, settings, lock;
+    private ImageView bg1_iv, bg2_iv, settings, lock_st, lock;
     private Activity activity;
     private SeekBar sb;
     private pl.droidsonroids.gif.GifImageButton gif_upArrow;
+    private TextView notice;
+    private AppBarLayout appBarLayout_appliances;
+    private TouchToUnLockView mUnlockView;
+    private View mContainerView;
 
 //    @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -50,14 +59,27 @@ public class MainActivity extends AppCompatActivity
 
         initiateAttributes();
 
-        animationLock();
+//        animationLock();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         handleBackgrondAnimation();
         takePermissionForTransparentStatusBar();
-        unlock();
+//        unlock();
         handleUpArrow();
+        handleRipple();
+        initView();
+
         handleSettings();
+        handleApplianceToolbar();
+    }
+
+    private void handleRipple() {
+        final RippleBackground rippleBackground= findViewById(R.id.content);
+        rippleBackground.startRippleAnimation();
+    }
+
+    private void handleApplianceToolbar() {
+
     }
 
     private void handleSettings() {
@@ -76,94 +98,73 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.commit();
                 findViewById(R.id.secondary_container).setVisibility(View.VISIBLE);
                 findViewById(R.id.secondary_container).bringToFront();
+
                 fragmentTransaction.addToBackStack(null);
             }
         });
     }
 
     private void handleUpArrow() {
-        SeekBar seekBar = findViewById(R.id.below_swiper);
-        seekBar.bringToFront();
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
+        gif_upArrow = findViewById(R.id.gif_up_arrow);
+        gif_upArrow.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
+            public void onClick(View view) {
+                Toast.makeText(activity, "open appliances", Toast.LENGTH_LONG).show();
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations( R.anim.enter_from_right, R.anim.exit_to_right,R.anim.enter_from_right, R.anim.exit_to_right);
+//                    fragmentTransaction.setCustomAnimations( R.animator.slide_up, 0, 0, R.animator.slide_down);
 
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress > 25) {
-                    seekBar.setProgress(0);
-                    Toast.makeText(activity, "open appliances", Toast.LENGTH_LONG).show();
+                fragmentTransaction.replace(R.id.secondary_container, new AppliancesFragment());
 
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.secondary_container, new AppliancesFragment());
-                    fragmentTransaction.commit();
-                    findViewById(R.id.secondary_container).setVisibility(View.VISIBLE);
-                    findViewById(R.id.secondary_container).bringToFront();
-                    fragmentTransaction.addToBackStack(null);
-                }
+                fragmentTransaction.commit();
+                findViewById(R.id.secondary_container).setVisibility(View.VISIBLE);
+                findViewById(R.id.secondary_container).bringToFront();
+                fragmentTransaction.addToBackStack(null);
             }
         });
     }
 
-    private void unlock() {
-        sb.bringToFront();
-        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
+    private void initView() {
+//        mContainerView.bringToFront();
+        mUnlockView.bringToFront();
+        findViewById(R.id.appBarLayout).bringToFront();
+        findViewById(R.id.bottom_layout).bringToFront();
+        mUnlockView.setOnTouchToUnlockListener(new TouchToUnLockView.OnTouchToUnlockListener() {
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            public void onTouchLockArea() {
+//                if (mContainerView != null) {
+//                    mContainerView.setBackgroundColor(Color.parseColor("#66000000"));
+//                }
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress > 90) {
-                    sb.setProgress(0);
-                    Toast.makeText(activity, "Unlocked", Toast.LENGTH_SHORT).show();
+            public void onSlidePercent(float percent) {
+                if (mContainerView != null) {
+//                    mContainerView.setAlpha(1 - percent < 0.05f ? 0.05f : 1 - percent);
+//                    mContainerView.setScaleX(1 + (percent > 1f ? 1f : percent) * 0.08f);
+//                    mContainerView.setScaleY(1 + (percent > 1f ? 1f : percent) * 0.08f);
                 }
             }
+
+            @Override
+            public void onSlideToUnlock() {
+                Toast.makeText(activity, "unlocked", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSlideAbort() {
+//                if (mContainerView != null) {
+//                    mContainerView.setAlpha(1.0f);
+//                    mContainerView.setBackgroundColor(0);
+//                    mContainerView.setScaleX(1f);
+//                    mContainerView.setScaleY(1f);
+//                }
+            }
         });
-    }
-
-
-    private void animationLock() {
-        ImageView circle1, circle2, circle3;
-        circle1 = findViewById(R.id.im_1002);
-        circle2 = findViewById(R.id.im_1003);
-        circle3 = findViewById(R.id.im_1004);
-        Animation circleAnimation1 = AnimationUtils.loadAnimation(this, R.anim.circle1_transition);
-        Animation circleAnimation2 = AnimationUtils.loadAnimation(this, R.anim.circle2_transition);
-        Animation circleAnimation3 = AnimationUtils.loadAnimation(this, R.anim.circle3_transition);
-        circle1.startAnimation(circleAnimation1);
-        circle2.startAnimation(circleAnimation2);
-        circle3.startAnimation(circleAnimation3);
-        circleExpnadAnimation(circle1);
-        circleExpnadAnimation(circle2 );
-        circleExpnadAnimation(circle3 );
 
     }
 
-    private void circleExpnadAnimation(ImageView circle) {
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(circle, "scaleX", 1.0f, 2.0f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(circle, "scaleY", 1.0f, 2.0f);
-
-        AnimatorSet scaleAnim = new AnimatorSet();
-        scaleAnim.setDuration(2000);
-        scaleAnim.play(scaleX).with(scaleY);
-        scaleAnim.start();
-        scaleX.setRepeatCount(ObjectAnimator.INFINITE);
-        scaleY.setRepeatCount(ObjectAnimator.INFINITE);
-        scaleX.setRepeatMode(ObjectAnimator.RESTART);
-        scaleY.setRepeatMode(ObjectAnimator.RESTART);
-    }
 
     private void initiateAttributes() {
         activity = this;
@@ -171,9 +172,16 @@ public class MainActivity extends AppCompatActivity
         bg1_iv = findViewById(R.id.background_one);
         bg2_iv = findViewById(R.id.background_two);
         bg1_iv.setVisibility(View.VISIBLE);
-        lock = findViewById(R.id.im_1001);
-        sb = findViewById(R.id.myseek);
+//        lock = findViewById(R.id.im_1001);
+//        sb = findViewById(R.id.myseek);
         gif_upArrow = findViewById(R.id.gif_up_arrow);
+//        notice = findViewById(R.id.tv_slideToUnlock);
+        appBarLayout_appliances = findViewById(R.id.appBarLayout_appliances);
+
+        mContainerView = findViewById(R.id.relel_ContentContainer);
+
+//        mUnlockView = ViewUtils.get(this, R.id.tulv_UnlockView);
+        mUnlockView = findViewById(R.id.tulv_UnlockView);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -188,8 +196,7 @@ public class MainActivity extends AppCompatActivity
         Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 50, 50, true));
         toolbar.setOverflowIcon(d);
-        findViewById(R.id.appBarLayout).bringToFront();
-        findViewById(R.id.bottom_layout).bringToFront();
+
 
     }
 
@@ -270,4 +277,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }

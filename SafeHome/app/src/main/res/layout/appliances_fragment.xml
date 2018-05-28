@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
     android:fitsSystemWindows="true"
+    android:background="#00000000"
     tools:context=".MainActivity"
     android:clickable="true"
     android:focusable="true"
@@ -15,46 +15,64 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="#00000000"
         android:orientation="vertical">
-        <RelativeLayout
-            android:id="@+id/down_layout"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout_appliances"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:gravity="top">
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:background="@android:color/transparent"
+            android:paddingTop="20dp"
+            app:elevation="0dp"
+            >
 
-            <pl.droidsonroids.gif.GifImageButton
-                android:id="@+id/gif_down_arrow"
-                android:layout_gravity="center"
-                android:layout_margin="20dp"
-                android:layout_width="30dp"
-                android:background="@android:color/transparent"
-                android:layout_height="30dp"
-                android:layout_centerInParent="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/arrow_down"/>
-            <View
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#2306183d"
-                android:layout_below="@+id/gif_down_arrow"
-                android:layout_marginBottom="5dp"/>
+                android:layout_height="60dp"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center"
+                android:gravity="center">
 
-        </RelativeLayout>
+                <pl.droidsonroids.gif.GifImageButton
+                    android:id="@+id/gif_down_arrow"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="30dp"
+                    android:background="@android:color/transparent"
+                    android:layout_height="30dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/arrow_down"/>
 
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
 
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+
+            android:background="@color/colorWhite"
+            >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#2306183d"
+                    android:layout_below="@+id/gif_down_arrow"
+                    android:layout_marginBottom="5dp"/>
+
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:text="My Apartment Status"
                     android:textSize="17dp"
                     android:textColor="@android:color/black"/>
@@ -169,6 +187,7 @@
                     android:layout_height="wrap_content"
                     android:text="Shared Appliances"
                     android:textSize="17dp"
+                    android:layout_marginLeft="10dp"
                     android:textColor="@android:color/black"/>
 
 
@@ -450,6 +469,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Rest Rooms"
+                    android:layout_marginLeft="10dp"
                     android:textSize="17dp"
                     android:textColor="@android:color/black"/>
 
@@ -562,7 +582,7 @@
 
 
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
 
 
 

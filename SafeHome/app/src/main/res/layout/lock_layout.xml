@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/txtv_UnlockTips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fram_UnLockContainer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:text="Slide Up To Unlock"
+        android:textColor="#FFF"
+        android:textSize="18sp"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/fram_UnLockContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center">
+        <com.skyfishjy.library.RippleBackground
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:id="@+id/content"
+            app:rb_color="#ffffff"
+            app:rb_radius="50dp"
+            app:rb_type="strokeRipple"
+            app:rb_rippleAmount="3"
+            app:rb_duration="3000"
+            app:rb_strokeWidth="4dp"
+            app:rb_scale="3">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:id="@+id/centerImage"
+                android:src="@drawable/door_lock"/>
+        </com.skyfishjy.library.RippleBackground>
+    </RelativeLayout>
+
+</RelativeLayout>
