@@ -1,12 +1,7 @@
 package com.example.android.safehome.Controller;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android.safehome.UIHandler.MainActivity;
@@ -22,21 +17,19 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.io.UnsupportedEncodingException;
 
+import static com.example.android.safehome.UIHandler.MainActivity.flag;
+
 public class DoorControl {
 
-    //    ImageView imvDoorStatus, imvDoorHandle;
-    static String host = "tcp://182.163.112.207:1883";
-    String clientId;
-    MqttAndroidClient client;
-    Boolean isConnected = false;
-    String payload;
-    String topicStatus = "apartment/user_input/fair";
-    String topInitLogin = "apartment/login/fair";
-    String topInitStatus = "apartment/status/fair";
-    Activity activity;
-    Boolean firstTime;
-    int i=1, j = 1;
-    int flag = -1;
+    private MqttAndroidClient client;
+    private String payload;
+    private String topicStatus = "apartment/user_input/fair";
+    private String topInitLogin = "apartment/login/fair";
+    private String topInitStatus = "apartment/status/fair";
+    private Activity activity;
+    private Boolean firstTime;
+    private int i=1, j = 1;
+    public int fl = 9;
 
 
     public DoorControl(final Activity activity, Boolean firstTime) {
@@ -46,7 +39,7 @@ public class DoorControl {
         callBack();
     }
 
-    public void callBack() {
+    private void callBack() {
         client.setCallback(new MqttCallback() {
             @Override
             public void connectionLost(Throwable cause) {
@@ -58,14 +51,13 @@ public class DoorControl {
             public void messageArrived(String topic, MqttMessage message) {
                 MainActivity.toastFlag = true;
 
-                String numberArray[] = new String[3];
+                String numberArray[];
 
-                String top = topic;
                 String subMsg;
                 // Toast.makeText(HomeApplianceV2.this, top, Toast.LENGTH_SHORT).show();
                 subMsg = new String(message.getPayload());
 
-                if (top.contains(topicStatus)) {
+                if (topic.contains(topicStatus)) {
                     //////////locked--------------
                     if (subMsg.contains("1")) {
                         payload = "1";
@@ -77,7 +69,7 @@ public class DoorControl {
                     }
                 }
                 ////get inital state
-                if (top.contains(topInitStatus)) {
+                if (topic.contains(topInitStatus)) {
                     numberArray = subMsg.split("");
                     if (numberArray[1].equals("0")) {
                         payload = "0";
@@ -93,14 +85,14 @@ public class DoorControl {
                         if(new String(message.getPayload()).equals("100")){
                             flag = 0;
                             Log.d("message flag", Integer.toString(flag));
-                            Toast.makeText(activity, "Locked", Toast.LENGTH_SHORT).show();
-
+//                            Toast.makeText(activity, "Locked", Toast.LENGTH_SHORT).show();
+                            fl = 0;
                         }
                         else{
                             flag = 1;
                             Log.d("message flag", Integer.toString(flag));
-                            Toast.makeText(activity, "Unlocked", Toast.LENGTH_SHORT).show();
-
+//                            Toast.makeText(activity, "Unlocked", Toast.LENGTH_SHORT).show();
+                            fl = 1;
                         }
                     }
 
@@ -111,20 +103,13 @@ public class DoorControl {
             @Override
             public void deliveryComplete(IMqttDeliveryToken token) {
 
-              Log.d("mess delivery", "deliveryComplete"+Integer.toString(j));
-                try {
-                    String s = new String(token.getMessage().getPayload());
-                } catch (MqttException e) {
-                    e.printStackTrace();
-                }
-                j++;
+              Log.d("mess delivery", "deliveryComplete"+Integer.toString(j++));
             }
         });
 
     }
 
-    public int handleDoorLock(){
-        int temp = -2;
+    public void handleDoorLock(){
         if(client.isConnected()){
             if(payload != null){
                 Log.d("payload", payload);
@@ -157,29 +142,26 @@ public class DoorControl {
                     }
                 }
             }
-            temp = flag;
+            else{
+                MainActivity.flag = -1;
+                fl = -1;
+            }
             MainActivity.toastFlag = false;
         }
 
 
-//        flag = -1;
-        return temp;
+
     }
 
 
-    public void establish() {
-        // ImportantSharedPreferences.doorStatusKey=
-        clientId = MqttClient.generateClientId();
+    private void establish() {
+        String clientId = MqttClient.generateClientId();
         Log.d("clientId", clientId);
+        String host = "tcp://182.163.112.207:1883";
         client = new MqttAndroidClient(activity, host, clientId);
         Log.d("client", client.toString());
         try {
             IMqttToken token = client.connect();
-           if(token != null){
-//               Log.d("token", "not null");
-//               Log.d("token Topic", Boolean.toString(token.getClient().isConnected()));
-//               Log.d("token wire message", token.getClient().getClientId());
-           }
             token.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
@@ -189,7 +171,6 @@ public class DoorControl {
                         client.publish(topInitLogin, "1".getBytes(), 0, false);
 
                         if(firstTime) Toast.makeText(activity, "Connected", Toast.LENGTH_SHORT).show();
-                        isConnected = true;
                     } catch (MqttException e) {
                         e.printStackTrace();
                     }
@@ -209,7 +190,6 @@ public class DoorControl {
                 }
             });
         } catch (MqttException e) {
-//            Log.d("connection", "exception");
             e.printStackTrace();
         }
     }
@@ -224,6 +204,5 @@ public class DoorControl {
     public void reconnect() throws MqttException {
         client.connect();
     }
-
 
 }

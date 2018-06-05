@@ -49,4 +49,24 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        >
+
+        <pl.droidsonroids.gif.GifImageButton
+            android:id="@+id/gif_up_arrow"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="10dp"
+            android:background="@android:color/transparent"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/upp_arrow_final"/>
+
+    </LinearLayout>
+
 </RelativeLayout>

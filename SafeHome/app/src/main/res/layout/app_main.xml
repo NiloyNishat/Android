@@ -26,11 +26,7 @@
             >
         </FrameLayout>
 
-        <com.example.android.safehome.UIHandler.TouchToUnLockView
-            android:id="@+id/tulv_UnlockView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible" />
+
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -64,25 +60,7 @@
         </android.support.design.widget.AppBarLayout>
 
 
-        <LinearLayout
-            android:id="@+id/bottom_layout"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:gravity="center"
-            android:layout_gravity="bottom|center"
-            android:orientation="vertical">
 
-            <pl.droidsonroids.gif.GifImageButton
-                android:id="@+id/gif_up_arrow"
-                android:layout_gravity="center"
-                android:layout_marginTop="23dp"
-                android:background="@android:color/transparent"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/upp_arrow_final"/>
-
-        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/relel_ContentContainer"
@@ -111,10 +89,17 @@
         <android.support.v4.widget.DrawerLayout
 
             android:id="@+id/drawer_layout"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
 
             >
+            <com.example.android.safehome.UIHandler.TouchToUnLockView
+                android:id="@+id/tulv_UnlockView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
+
+
 
             <android.support.design.widget.NavigationView
                 android:id="@+id/nav_view"

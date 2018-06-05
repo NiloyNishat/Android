@@ -4,8 +4,6 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -29,10 +27,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.safehome.Controller.DoorControl;
@@ -50,16 +44,16 @@ public class MainActivity extends AppCompatActivity
 
     private ImageView bg1_iv, bg2_iv, settings, lock_st, lock;
     private Activity activity;
-    private SeekBar sb;
     private pl.droidsonroids.gif.GifImageButton gif_upArrow;
     DoorControl doorControl;
 
     private AppBarLayout appBarLayout_appliances;
     public static Boolean toastFlag = false;
     private TouchToUnLockView mUnlockView;
+    DrawerLayout drawer;
     private View mContainerView;
+    public static int flag = -1;
     int i=1;
-    int flag;
 
 //    @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -70,7 +64,7 @@ public class MainActivity extends AppCompatActivity
         initiateAttributes();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        handleBackgrondAnimation();
+        handleBackgroundAnimation();
         takePermissionForTransparentStatusBar();
 
         handleUpArrow();
@@ -98,7 +92,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d("rebuild", Integer.toString(i++));
 
             }
-        },500);
+        },0);
     }
 
     private void handleRipple() {
@@ -152,12 +146,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initView() {
-        mUnlockView.bringToFront();
-        doorControl = new DoorControl(activity, true);
 
-        DrawerLayout dw = findViewById(R.id.drawer_layout);
-        dw.bringChildToFront(findViewById(R.id.nav_view));
-        dw.requestLayout();
+        doorControl = new DoorControl(activity, true);
 
         findViewById(R.id.appBarLayout).bringToFront();
         findViewById(R.id.bottom_layout).bringToFront();
@@ -171,9 +161,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onSlidePercent(float percent) {
                 if (mContainerView != null) {
-//                    mContainerView.setAlpha(1 - percent < 0.05f ? 0.05f : 1 - percent);
-//                    mContainerView.setScaleX(1 + (percent > 1f ? 1f : percent) * 0.08f);
-//                    mContainerView.setScaleY(1 + (percent > 1f ? 1f : percent) * 0.08f);
                 }
             }
 
@@ -190,63 +177,56 @@ public class MainActivity extends AppCompatActivity
                     AlertDialog dialogue = new SpotsDialog(activity, R.style.Custom);
                     @Override
                     protected void onPreExecute() {
-                        handleClient();
-                        flag = doorControl.handleDoorLock();
                         this.dialogue.setCancelable(false);
                         this.dialogue.show();
-
+                        handleClient();
                     }
 
                     @Override
                     protected String doInBackground(String... strings) {
-                        try {
 
-                            Thread.sleep(1000);
+                        doorControl.handleDoorLock();
+                        try {
+                            Thread.sleep(1200);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+
                         return null;
                     }
 
                     @Override
                     protected void onPostExecute(String s) {
+
                         if ( dialogue!=null && dialogue.isShowing() ){
                             dialogue.dismiss();
                         }
                         Log.d("mess main flag", Integer.toString(flag));
-                        if (flag == -1 && !toastFlag){
+                        if (flag == -1){
                             Toast.makeText(activity, "Device unavailable", Toast.LENGTH_SHORT).show();
                         }
-//                        else{
-//                            if(flag == 1){
-//                                Toast.makeText(activity, "Locked", Toast.LENGTH_SHORT).show();
-//                            }
-//                            else{
-//                                Toast.makeText(activity, "Unlocked", Toast.LENGTH_SHORT).show();
-//                            }
-//
-//                        }
+                        else{
+                            if(flag == 1){
+                                Toast.makeText(activity, "Unlocked", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(activity, "Locked", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
 
                     }
                 };
                 progressBarAsyncTask.execute();
+                flag = doorControl.fl;
                 Log.d("mess main flag", Integer.toString(flag));
 
             }
 
-
-
             @Override
             public void onSlideAbort() {
-//                if (mContainerView != null) {
-//                    mContainerView.setAlpha(1.0f);
-//                    mContainerView.setBackgroundColor(0);
-//                    mContainerView.setScaleX(1f);
-//                    mContainerView.setScaleY(1f);
-//                }
             }
         });
-
     }
 
     @Override
@@ -271,11 +251,11 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
-        drawer.bringToFront();
+//        if(drawer.isShown()) drawer.bringToFront();
         toggle.syncState();
 
         Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.top_menu_settings_icon);
@@ -286,7 +266,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void handleBackgrondAnimation() {
+    private void handleBackgroundAnimation() {
         final ValueAnimator animator = ValueAnimator.ofFloat(0.0f, 1.0f);
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setInterpolator(new LinearInterpolator());
@@ -356,8 +336,6 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.item9) {
 
         }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
 //        drawer.bringToFront();
         drawer.closeDrawer(GravityCompat.START);
         return true;
