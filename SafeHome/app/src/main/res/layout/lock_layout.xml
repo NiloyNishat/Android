@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".UIHandler.MainActivity">
 
     <TextView
         android:id="@+id/txtv_UnlockTips"
@@ -37,7 +37,7 @@
             app:rb_type="strokeRipple"
             app:rb_rippleAmount="3"
             app:rb_duration="3000"
-            app:rb_strokeWidth="4dp"
+            app:rb_strokeWidth="1pt"
             app:rb_scale="3">
             <ImageView
                 android:layout_width="100dp"
@@ -46,6 +46,7 @@
                 android:id="@+id/centerImage"
                 android:src="@drawable/door_lock"/>
         </com.skyfishjy.library.RippleBackground>
+
     </RelativeLayout>
 
 </RelativeLayout>

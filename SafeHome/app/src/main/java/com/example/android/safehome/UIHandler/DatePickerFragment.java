@@ -1,4 +1,4 @@
-package com.example.android.safehome;
+package com.example.android.safehome.UIHandler;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;

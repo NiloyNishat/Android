@@ -1,4 +1,4 @@
-package com.example.android.safehome;
+package com.example.android.safehome.UIHandler;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -21,6 +21,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.example.android.safehome.R;
 
 import java.text.DateFormat;
 import java.util.Calendar;

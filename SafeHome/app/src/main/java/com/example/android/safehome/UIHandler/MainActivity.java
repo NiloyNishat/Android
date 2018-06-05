@@ -1,13 +1,14 @@
-package com.example.android.safehome;
+package com.example.android.safehome.UIHandler;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.graphics.Color;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,22 +24,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.safehome.Controller.DoorControl;
+import com.example.android.safehome.R;
 import com.skyfishjy.library.RippleBackground;
+
+import org.eclipse.paho.client.mqttv3.MqttException;
+
+import dmax.dialog.SpotsDialog;
+
+import static java.lang.Thread.sleep;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -46,10 +52,14 @@ public class MainActivity extends AppCompatActivity
     private Activity activity;
     private SeekBar sb;
     private pl.droidsonroids.gif.GifImageButton gif_upArrow;
-    private TextView notice;
+    DoorControl doorControl;
+
     private AppBarLayout appBarLayout_appliances;
+    public static Boolean toastFlag = false;
     private TouchToUnLockView mUnlockView;
     private View mContainerView;
+    int i=1;
+    int flag;
 
 //    @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -58,19 +68,37 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.app_main);
 
         initiateAttributes();
-
-//        animationLock();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         handleBackgrondAnimation();
         takePermissionForTransparentStatusBar();
-//        unlock();
+
         handleUpArrow();
         handleRipple();
         initView();
 
+
         handleSettings();
         handleApplianceToolbar();
+    }
+
+    private void handleClient() {
+        Handler handler=new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doorControl.destroyClient();
+                try {
+                    doorControl.reconnect();
+                    doorControl = new DoorControl(activity, false);
+
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
+                Log.d("rebuild", Integer.toString(i++));
+
+            }
+        },500);
     }
 
     private void handleRipple() {
@@ -113,8 +141,6 @@ public class MainActivity extends AppCompatActivity
 
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations( R.anim.enter_from_right, R.anim.exit_to_right,R.anim.enter_from_right, R.anim.exit_to_right);
-//                    fragmentTransaction.setCustomAnimations( R.animator.slide_up, 0, 0, R.animator.slide_down);
-
                 fragmentTransaction.replace(R.id.secondary_container, new AppliancesFragment());
 
                 fragmentTransaction.commit();
@@ -126,16 +152,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initView() {
-//        mContainerView.bringToFront();
         mUnlockView.bringToFront();
+        doorControl = new DoorControl(activity, true);
+
+        DrawerLayout dw = findViewById(R.id.drawer_layout);
+        dw.bringChildToFront(findViewById(R.id.nav_view));
+        dw.requestLayout();
+
         findViewById(R.id.appBarLayout).bringToFront();
         findViewById(R.id.bottom_layout).bringToFront();
+
+
         mUnlockView.setOnTouchToUnlockListener(new TouchToUnLockView.OnTouchToUnlockListener() {
             @Override
             public void onTouchLockArea() {
-//                if (mContainerView != null) {
-//                    mContainerView.setBackgroundColor(Color.parseColor("#66000000"));
-//                }
             }
 
             @Override
@@ -149,8 +179,62 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onSlideToUnlock() {
-                Toast.makeText(activity, "unlocked", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(activity, "unlocked", Toast.LENGTH_SHORT).show();
+                handleProgressbar();
             }
+
+            private void handleProgressbar() {
+
+                @SuppressLint("StaticFieldLeak") AsyncTask<String, String, String> progressBarAsyncTask = new AsyncTask<String, String, String>() {
+
+                    AlertDialog dialogue = new SpotsDialog(activity, R.style.Custom);
+                    @Override
+                    protected void onPreExecute() {
+                        handleClient();
+                        flag = doorControl.handleDoorLock();
+                        this.dialogue.setCancelable(false);
+                        this.dialogue.show();
+
+                    }
+
+                    @Override
+                    protected String doInBackground(String... strings) {
+                        try {
+
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(String s) {
+                        if ( dialogue!=null && dialogue.isShowing() ){
+                            dialogue.dismiss();
+                        }
+                        Log.d("mess main flag", Integer.toString(flag));
+                        if (flag == -1 && !toastFlag){
+                            Toast.makeText(activity, "Device unavailable", Toast.LENGTH_SHORT).show();
+                        }
+//                        else{
+//                            if(flag == 1){
+//                                Toast.makeText(activity, "Locked", Toast.LENGTH_SHORT).show();
+//                            }
+//                            else{
+//                                Toast.makeText(activity, "Unlocked", Toast.LENGTH_SHORT).show();
+//                            }
+//
+//                        }
+
+                    }
+                };
+                progressBarAsyncTask.execute();
+                Log.d("mess main flag", Integer.toString(flag));
+
+            }
+
+
 
             @Override
             public void onSlideAbort() {
@@ -165,6 +249,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        doorControl.destroyClient();
+    }
 
     private void initiateAttributes() {
         activity = this;
@@ -172,15 +261,11 @@ public class MainActivity extends AppCompatActivity
         bg1_iv = findViewById(R.id.background_one);
         bg2_iv = findViewById(R.id.background_two);
         bg1_iv.setVisibility(View.VISIBLE);
-//        lock = findViewById(R.id.im_1001);
-//        sb = findViewById(R.id.myseek);
+
         gif_upArrow = findViewById(R.id.gif_up_arrow);
-//        notice = findViewById(R.id.tv_slideToUnlock);
         appBarLayout_appliances = findViewById(R.id.appBarLayout_appliances);
 
         mContainerView = findViewById(R.id.relel_ContentContainer);
-
-//        mUnlockView = ViewUtils.get(this, R.id.tulv_UnlockView);
         mUnlockView = findViewById(R.id.tulv_UnlockView);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -190,6 +275,7 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+        drawer.bringToFront();
         toggle.syncState();
 
         Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.top_menu_settings_icon);
@@ -235,9 +321,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-
     }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -274,6 +358,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+//        drawer.bringToFront();
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

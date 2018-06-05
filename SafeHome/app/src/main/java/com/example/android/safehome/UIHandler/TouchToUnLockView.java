@@ -1,4 +1,4 @@
-package com.example.android.safehome;
+package com.example.android.safehome.UIHandler;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,6 +13,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import com.example.android.safehome.R;
 
 public class TouchToUnLockView extends FrameLayout {
 
@@ -74,10 +76,11 @@ public class TouchToUnLockView extends FrameLayout {
     }
 
     private boolean isInTouchUnlockArea(float motionX, float motionY) {
-        if (motionX >= mUnLockContainer.getX()
-                && motionX <= mUnLockContainer.getX() + mUnLockContainer.getWidth()
-                && motionY >= mUnLockContainer.getY()
-                && motionY <= mUnLockContainer.getY() + mUnLockContainer.getHeight()) {
+        View area = findViewById(R.id.centerImage);
+        if (motionX >= area.getX()
+                && motionX <= area.getX() + area.getWidth()
+                && motionY >= area.getY()
+                && motionY <= area.getY() + area.getHeight()) {
             return true;
         }
         return false;

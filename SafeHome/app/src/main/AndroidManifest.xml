@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.safehome">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.AppBarOverlay">
         <activity
-            android:name=".SplashScreen"
+            android:name=".UIHandler.SplashScreen"
             android:theme="@style/AppTheme.AppBarOverlay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,14 +24,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
+
         <activity
-            android:name=".EntryPage"/>
+            android:name=".UIHandler.EntryPage"/>
         <activity
-            android:name=".SignIn" />
+            android:name=".UIHandler.SignIn" />
         <activity
-            android:name=".SignUp" />
+            android:name=".UIHandler.SignUp" />
         <activity
-            android:name=".MainActivity" />
+            android:name=".UIHandler.MainActivity" />
     </application>
 
 </manifest>

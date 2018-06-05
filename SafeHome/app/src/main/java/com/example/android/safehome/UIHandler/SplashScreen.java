@@ -1,9 +1,10 @@
-package com.example.android.safehome;
+package com.example.android.safehome.UIHandler;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.android.safehome.R;
 
 public class SplashScreen extends AppCompatActivity {
 

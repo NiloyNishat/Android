@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/circular_loader_bg">
+        <shape
+            android:shape="ring"
+            android:useLevel="false">
+            <solid android:color="#55a2d2"/>
+        </shape>
+    </item>
+
+    <item android:id="@+id/circular_loader_progress">
+        <rotate android:fromDegrees="0"
+            android:toDegrees="180">
+            <shape
+                android:shape="ring"
+                android:useLevel="false">
+                <gradient
+                    android:color="#00ffffff"
+                    android:angle="0"
+                    android:startColor="#084f78"
+                    android:type="sweep"
+                    android:useLevel="false"/>
+            </shape>
+        </rotate>
+    </item>
+
+
+</layer-list>

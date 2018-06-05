@@ -6,5 +6,6 @@
     <color name="colorWhite">#FFF</color>
     <color name="colorBlue">#3178ba</color>
     <color name="colorTransparent">#00ffffff</color>
+    <color name="dialogueBG">#73528aa4</color>
 
 </resources>

@@ -45,5 +45,12 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
+    <style name="Custom" parent="android:Theme.DeviceDefault.Dialog">
+        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="DialogTitleText">Please Wait..</item>
+        <item name="DialogSpotColor">#55b7e4</item>
+        <item name="DialogSpotCount">8</item>
+        <item name="android:windowBackground">@color/dialogueBG</item>
+    </style>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.example.android.safehome;
+package com.example.android.safehome.UIHandler;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.example.android.safehome.R;
 
 public class SignIn extends AppCompatActivity {
 

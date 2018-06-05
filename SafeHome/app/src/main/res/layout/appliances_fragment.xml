@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="#00000000"
-    tools:context=".MainActivity"
+    tools:context=".UIHandler.MainActivity"
     android:clickable="true"
     android:focusable="true"
     >
