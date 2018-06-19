@@ -20,6 +20,10 @@ import android.widget.Toast;
 
 import com.example.android.safehome.R;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class SignIn extends AppCompatActivity {
 
     private ImageView bg1_iv, bg2_iv;
@@ -27,6 +31,8 @@ public class SignIn extends AppCompatActivity {
     private EditText et_username, et_password;
     private TextInputLayout textInputLayout_username, textInputLayout_password;
     Activity activity;
+    private String FILE_NAME = "text.txt";
+    private String username = "a", password = "a";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +43,33 @@ public class SignIn extends AppCompatActivity {
         handleBackgrondAnimation();
         takePermissionForTransparentStatusBar();
         handleSubmitButton();
+    }
+
+    private void readFromFile() {
+        String inputString;
+        try {
+            BufferedReader bReader = new BufferedReader(new InputStreamReader(activity.openFileInput(FILE_NAME)));
+            String line;
+            StringBuilder text = new StringBuilder();
+            while ((line = bReader.readLine()) != null) {
+                text.append( line);
+            }
+
+            inputString = text.toString();
+            if (inputString != null){
+                password = inputString;
+            }
+            bReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        readFromFile();
+
     }
 
     private void handleSubmitButton() {
@@ -100,10 +133,20 @@ public class SignIn extends AppCompatActivity {
             return;
         }
 
-        Toast.makeText(getApplicationContext(), "Successful!", Toast.LENGTH_SHORT).show();
+        if(et_username.getText().toString().equals(username) && et_password.getText().toString().equals(password)){
+            Toast.makeText(getApplicationContext(), "Successful!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            et_password.setText(null);
+            et_username.setText(null);
+            textInputLayout_password.setErrorEnabled(false);
+            textInputLayout_username.setErrorEnabled(false);
+        }
 
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        else {
+            Toast.makeText(activity, "Invalid credentials!!", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private boolean validateUsername() {
@@ -111,7 +154,8 @@ public class SignIn extends AppCompatActivity {
             textInputLayout_username.setError(getString(R.string.err_msg_name));
             requestFocus(et_username);
             return false;
-        } else {
+        }
+        else {
             textInputLayout_username.setErrorEnabled(false);
         }
 

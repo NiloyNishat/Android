@@ -1,126 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/transparent"
-    android:gravity="bottom"
-    sothree:umanoFadeColor="@color/colorPrimaryDark"
-    sothree:umanoPanelHeight="40dp"
-    sothree:umanoOverlay="true"
-
     >
 
-    <android.support.design.widget.CoordinatorLayout
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:context=".UIHandler.MainActivity">
+        android:background="@android:color/transparent"
+        android:gravity="bottom"
+        sothree:umanoFadeColor="@color/colorPrimaryDark"
+        sothree:umanoPanelHeight="40dp"
+        sothree:umanoOverlay="true"
 
-        <FrameLayout
-            android:id="@+id/secondary_container"
+        >
+
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
-        </FrameLayout>
+            android:fitsSystemWindows="true"
+            tools:context=".UIHandler.MainActivity">
 
-
-
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            android:background="@android:color/transparent"
-            android:paddingTop="15dp"
-            app:elevation="0dp"
-            >
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+            <FrameLayout
+                android:id="@+id/secondary_container"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent">
+                android:layout_height="match_parent"
+                >
+            </FrameLayout>
+
+
+
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/AppTheme.AppBarOverlay"
+                android:background="@android:color/transparent"
+                android:paddingTop="15dp"
+                app:elevation="0dp"
+                >
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent">
+
+                    <ImageView
+                        android:id="@+id/bt_upper_fragment"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="20dp"
+                        android:background="@null"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/top_menu_settings_icon"/>
+
+                </android.support.v7.widget.Toolbar>
+
+            </android.support.design.widget.AppBarLayout>
+
+
+
+
+            <RelativeLayout
+                android:id="@+id/relel_ContentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
 
                 <ImageView
-                    android:id="@+id/bt_upper_fragment"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="20dp"
-                    android:background="@null"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/top_menu_settings_icon"/>
+                    android:id="@+id/background_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/home_bg_half1"/>
 
-            </android.support.v7.widget.Toolbar>
-
-        </android.support.design.widget.AppBarLayout>
-
+                <ImageView
+                    android:id="@+id/background_two"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/home_bg_half2"/>
 
 
+
+            </RelativeLayout>
+
+
+
+        </android.support.design.widget.CoordinatorLayout>
 
         <RelativeLayout
-            android:id="@+id/relel_ContentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
 
-            <ImageView
-                android:id="@+id/background_one"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@drawable/home_bg_half1"/>
-
-            <ImageView
-                android:id="@+id/background_two"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@drawable/home_bg_half2"/>
-
-
-
+            android:background="#05000000">
+            <include
+                layout="@layout/appliances_fragment"/>
         </RelativeLayout>
 
-        <android.support.v4.widget.DrawerLayout
-
-            android:id="@+id/drawer_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            >
-            <com.example.android.safehome.UIHandler.TouchToUnLockView
-                android:id="@+id/tulv_UnlockView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible" />
-
-
-
-            <android.support.design.widget.NavigationView
-                android:id="@+id/nav_view"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                app:headerLayout="@layout/home_header"
-                app:menu="@menu/left_menu" />
-
-        </android.support.v4.widget.DrawerLayout>
-
-    </android.support.design.widget.CoordinatorLayout>
-
-    <RelativeLayout
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+    <com.example.android.safehome.UIHandler.TouchToUnLockView
+        android:id="@+id/tulv_UnlockView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="visible" />
 
-        android:background="#05000000">
-        <include
-            layout="@layout/appliances_fragment"/>
-    </RelativeLayout>
 
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/home_header"
+        app:menu="@menu/left_menu" />
+
+</android.support.v4.widget.DrawerLayout>

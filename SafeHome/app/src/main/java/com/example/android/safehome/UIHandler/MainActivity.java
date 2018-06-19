@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -27,9 +28,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.safehome.Controller.DoorControl;
+import com.example.android.safehome.Controller.AppliancesController;
 import com.example.android.safehome.R;
 import com.skyfishjy.library.RippleBackground;
 
@@ -42,17 +44,20 @@ import static java.lang.Thread.sleep;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    private ImageView bg1_iv, bg2_iv, settings, lock_st, lock;
+    private ImageView bg1_iv, bg2_iv, settings;
+    ImageView imageView_ac, imageView_light;
+    private TextView textView_ac, textView_light;
+
     private Activity activity;
     private pl.droidsonroids.gif.GifImageButton gif_upArrow;
-    DoorControl doorControl;
+    AppliancesController appliancesController;
 
     private AppBarLayout appBarLayout_appliances;
     public static Boolean toastFlag = false;
     private TouchToUnLockView mUnlockView;
     DrawerLayout drawer;
     private View mContainerView;
-    public static int flag = -1;
+    public static int flag = -1, acFlag = -1;
     int i=1;
 
 //    @SuppressLint("ClickableViewAccessibility")
@@ -71,20 +76,19 @@ public class MainActivity extends AppCompatActivity
         handleRipple();
         initView();
 
-
         handleSettings();
         handleApplianceToolbar();
     }
 
-    private void handleClient() {
+    public void handleClient() {
         Handler handler=new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                doorControl.destroyClient();
+                appliancesController.destroyClient();
                 try {
-                    doorControl.reconnect();
-                    doorControl = new DoorControl(activity, false);
+                    appliancesController.reconnect();
+                    appliancesController = new AppliancesController(activity, false);
 
                 } catch (MqttException e) {
                     e.printStackTrace();
@@ -101,8 +105,73 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void handleApplianceToolbar() {
+        handleAC();
+        handleLight();
 
     }
+
+    private void handleLight() {
+        imageView_light.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                appliancesController.handleLight();
+//                @SuppressLint("StaticFieldLeak") AsyncTask<String, String, String> progressBarAsyncTask = new AsyncTask<String, String, String>() {
+//
+//                    AlertDialog dialogue = new SpotsDialog(activity, R.style.Custom);
+//                    @Override
+//                    protected void onPreExecute() {
+//                        this.dialogue.setCancelable(false);
+//                        this.dialogue.show();
+//                        appliancesController.handleLight();
+//                    }
+//
+//                    @Override
+//                    protected String doInBackground(String... strings) {
+//                        try {
+//                            Thread.sleep(1500);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    protected void onPostExecute(String s) {
+//                        Log.d("acMsg", Integer.toString(acFlag));
+//                        if(acFlag == 5){
+//                            imageView_light.setImageDrawable(activity.getResources().getDrawable(R.drawable.my_apartment_light_bulb_on));
+//                            textView_light.setText("Light On");
+//                        }
+//                        else if(acFlag == 4){
+//                            imageView_light.setImageDrawable(activity.getResources().getDrawable(R.drawable.my_apartment_light_bulb_off));
+//                            textView_light.setText("Light Off");
+//                        }
+//                        else {
+//                            Toast.makeText(activity, "device unavailable", Toast.LENGTH_SHORT).show();
+//                        }
+//                        if ( dialogue!=null && dialogue.isShowing() ){
+//                            dialogue.dismiss();
+//                        }
+//                    }
+//                };
+//                progressBarAsyncTask.execute();
+
+//                handleClient();
+            }
+        });
+
+    }
+
+    private void handleAC() {
+        imageView_ac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                appliancesController.handleAC();
+            }
+
+        });
+    }
+
 
     private void handleSettings() {
         settings = findViewById(R.id.bt_upper_fragment);
@@ -147,7 +216,7 @@ public class MainActivity extends AppCompatActivity
 
     private void initView() {
 
-        doorControl = new DoorControl(activity, true);
+        appliancesController = new AppliancesController(activity, true);
 
         findViewById(R.id.appBarLayout).bringToFront();
         findViewById(R.id.bottom_layout).bringToFront();
@@ -185,9 +254,9 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     protected String doInBackground(String... strings) {
 
-                        doorControl.handleDoorLock();
+                        appliancesController.handleDoorLock();
                         try {
-                            Thread.sleep(1200);
+                            Thread.sleep(1500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -198,27 +267,26 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     protected void onPostExecute(String s) {
 
-                        if ( dialogue!=null && dialogue.isShowing() ){
-                            dialogue.dismiss();
-                        }
+
                         Log.d("mess main flag", Integer.toString(flag));
                         if (flag == -1){
                             Toast.makeText(activity, "Device unavailable", Toast.LENGTH_SHORT).show();
                         }
-                        else{
-                            if(flag == 1){
-                                Toast.makeText(activity, "Unlocked", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                Toast.makeText(activity, "Locked", Toast.LENGTH_SHORT).show();
-                            }
-
+//                        else{
+//                            if(flag == 1){
+//                                Toast.makeText(activity, "Unlocked", Toast.LENGTH_SHORT).show();
+//                            }
+//                            else{
+//                                Toast.makeText(activity, "Locked", Toast.LENGTH_SHORT).show();
+//                            }
+//
+//                        }
+                        if ( dialogue!=null && dialogue.isShowing() ){
+                            dialogue.dismiss();
                         }
-
                     }
                 };
                 progressBarAsyncTask.execute();
-                flag = doorControl.fl;
                 Log.d("mess main flag", Integer.toString(flag));
 
             }
@@ -232,7 +300,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        doorControl.destroyClient();
+        appliancesController.destroyClient();
     }
 
     private void initiateAttributes() {
@@ -241,7 +309,11 @@ public class MainActivity extends AppCompatActivity
         bg1_iv = findViewById(R.id.background_one);
         bg2_iv = findViewById(R.id.background_two);
         bg1_iv.setVisibility(View.VISIBLE);
+        imageView_ac = findViewById(R.id.im_airConditioner);
+        imageView_light = findViewById(R.id.im_light);
 
+        textView_ac = activity.findViewById(R.id.tv_airConditioner);
+        textView_light = activity.findViewById(R.id.tv_light);
         gif_upArrow = findViewById(R.id.gif_up_arrow);
         appBarLayout_appliances = findViewById(R.id.appBarLayout_appliances);
 
@@ -331,13 +403,16 @@ public class MainActivity extends AppCompatActivity
 
         }
         else if (id == R.id.item8) {
+            Intent intent = new Intent(activity, changePassword.class);
+            startActivity(intent);
 
         }
         else if (id == R.id.item9) {
+            finish();
 
         }
 //        drawer.bringToFront();
-        drawer.closeDrawer(GravityCompat.START);
+//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

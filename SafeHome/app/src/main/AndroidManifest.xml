@@ -27,14 +27,11 @@
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
 
-        <activity
-            android:name=".UIHandler.EntryPage"/>
-        <activity
-            android:name=".UIHandler.SignIn" />
-        <activity
-            android:name=".UIHandler.SignUp" />
-        <activity
-            android:name=".UIHandler.MainActivity" />
+        <activity android:name=".UIHandler.EntryPage" />
+        <activity android:name=".UIHandler.SignIn" />
+        <activity android:name=".UIHandler.SignUp" />
+        <activity android:name=".UIHandler.MainActivity" />
+        <activity android:name=".UIHandler.changePassword"></activity>
     </application>
 
 </manifest>
