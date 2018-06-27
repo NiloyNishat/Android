@@ -276,7 +276,7 @@ public class AppliancesController {
     private void establish() {
         String clientId = MqttClient.generateClientId();
         Log.d("clientId", clientId);
-        String host = "tcp://182.163.112.207:1883";
+        String host = "tcp:// ";
         client = new MqttAndroidClient(activity, host, clientId);
         Log.d("client", client.toString());
         try {

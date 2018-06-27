@@ -27,15 +27,33 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.example.android.safehome.Controller.Appliance;
 import com.example.android.safehome.Controller.AppliancesController;
+import com.example.android.safehome.Controller.MyGridAdapter;
+import com.example.android.safehome.Controller.User;
+import com.example.android.safehome.Controller.VolleySingleton;
 import com.example.android.safehome.R;
 import com.skyfishjy.library.RippleBackground;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import dmax.dialog.SpotsDialog;
 
@@ -59,6 +77,10 @@ public class MainActivity extends AppCompatActivity
     private View mContainerView;
     public static int flag = -1, acFlag = -1;
     int i=1;
+    User user;
+    ArrayList<Appliance> listOfAppliances;
+    private MyGridAdapter myGridAdapter;
+    private GridView gridView;
 
 //    @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -77,7 +99,67 @@ public class MainActivity extends AppCompatActivity
         initView();
 
         handleSettings();
-        handleApplianceToolbar();
+//        handleApplianceToolbar();
+        getApartmentList();
+    }
+
+    private void getApartmentList() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://192.168.2.85:8001/api/get_appliance_by_apartment/",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            //converting response to json object
+                            JSONObject obj = new JSONObject(response);
+
+                            //if no error in response
+                            if (obj.getString("status_code").equals("200")) {
+
+//                                Log.d("response_", obj.getString("appliance_details"));
+                                JSONArray jsonArray = obj.getJSONArray("appliance_details");
+                                JSONObject jsonListOfAppliance[] = new JSONObject[jsonArray.length()];
+                                listOfAppliances = new ArrayList<Appliance>();
+
+                                for (int i=0; i<jsonArray.length();i++){
+                                    jsonListOfAppliance[i] = new JSONObject(jsonArray.get(i).toString());
+                                    Log.d("sssssssssssss", Integer.toString(listOfAppliances.size()));
+                                    Appliance a = new Appliance();
+                                    a.name = jsonListOfAppliance[i].getString("apartment_appliance_name");
+                                    a.image_url = jsonListOfAppliance[i].getString("apartment_appliance_icon");
+                                    a.status = jsonListOfAppliance[i].getString("on_off_status");
+                                    if(!a.name.equals("Door Lock"))listOfAppliances.add(a);
+//                                    Log.d("response_", Integer.toString(i)+" "+listOfAppliances.get(i).name + " "
+//                                            + listOfAppliances.get(i).status + " "+ listOfAppliances.get(i).image_url);
+
+                                }
+
+                                myGridAdapter = new MyGridAdapter(activity, listOfAppliances);
+                                gridView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                                gridView.setAdapter(myGridAdapter);
+                            }
+                            else {
+                                Toast.makeText(activity, obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("apartment_id", "1");
+                return params;
+            }
+        };
+        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
     }
 
     public void handleClient() {
@@ -220,6 +302,7 @@ public class MainActivity extends AppCompatActivity
 
         findViewById(R.id.appBarLayout).bringToFront();
         findViewById(R.id.bottom_layout).bringToFront();
+//        findViewById(R.id.tulv_UnlockView).bringToFront();
 
 
         mUnlockView.setOnTouchToUnlockListener(new TouchToUnLockView.OnTouchToUnlockListener() {
@@ -312,6 +395,8 @@ public class MainActivity extends AppCompatActivity
         imageView_ac = findViewById(R.id.im_airConditioner);
         imageView_light = findViewById(R.id.im_light);
 
+        gridView = findViewById(R.id.appliance_grid);
+
         textView_ac = activity.findViewById(R.id.tv_airConditioner);
         textView_light = activity.findViewById(R.id.tv_light);
         gif_upArrow = findViewById(R.id.gif_up_arrow);
@@ -335,6 +420,10 @@ public class MainActivity extends AppCompatActivity
         Drawable d = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 50, 50, true));
         toolbar.setOverflowIcon(d);
 
+        user = new User( getIntent().getStringExtra("username"),
+                        getIntent().getStringExtra("password"),
+                        getIntent().getStringExtra("device_id"),
+                        getIntent().getStringExtra("device_type"));
 
     }
 

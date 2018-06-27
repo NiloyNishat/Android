@@ -1,17 +1,21 @@
 package com.example.android.safehome.UIHandler;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.design.widget.TextInputLayout;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,6 +28,14 @@ import android.widget.Toast;
 
 import com.example.android.safehome.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.util.Calendar;
 
@@ -174,9 +186,83 @@ public class SignUp extends AppCompatActivity implements DatePickerDialog.OnDate
 
         Toast.makeText(getApplicationContext(), "Successful!", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(this, EntryPage.class);
-        startActivity(intent);
+        sendRequestToAPI();
+        finish();
     }
+
+    private void sendRequestToAPI() {
+        String deviceID = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        Log.d("deviceId", deviceID);
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("first_name", et_firstName.getText().toString());
+            postData.put("last_name", et_LastName.getText().toString());
+            postData.put("username", et_username.getText().toString());
+            postData.put("email", et_email.getText().toString());
+            postData.put("contact_no", et_contactNo.getText().toString());
+            postData.put("occupation", et_occupation.getText().toString());
+            postData.put("rent_from", et_dateFrom.getText().toString());
+            postData.put("rent_to", et_dateTo.getText().toString());
+            postData.put("verify_photo", "photo");
+            postData.put("device", deviceID);
+            postData.put("device_type", "1");
+
+
+            new SendDeviceDetails().execute("http://192.168.2.85:8001/api/request_apartment/", postData.toString());
+//            new SendDeviceDetails.execute("http://192.168.2.85:8001/api/login/", postData.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class SendDeviceDetails extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String data = "";
+
+            HttpURLConnection httpURLConnection = null;
+            try {
+
+                httpURLConnection = (HttpURLConnection) new URL(params[0]).openConnection();
+                httpURLConnection.setRequestMethod("POST");
+
+                httpURLConnection.setDoOutput(true);
+
+                DataOutputStream wr = new DataOutputStream(httpURLConnection.getOutputStream());
+                wr.writeBytes("PostData=" + params[1]);
+                wr.flush();
+                wr.close();
+
+                InputStream in = httpURLConnection.getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(in);
+
+                int inputStreamData = inputStreamReader.read();
+                while (inputStreamData != -1) {
+                    char current = (char) inputStreamData;
+                    inputStreamData = inputStreamReader.read();
+                    data += current;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (httpURLConnection != null) {
+                    httpURLConnection.disconnect();
+                }
+            }
+
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.e("TAG", result); // this is expecting a response code to be sent from your server upon receiving the POST data
+        }
+    }
+
     private boolean validateRentFrom() {
         if (et_dateFrom.getText().toString().trim().isEmpty()) {
             textInputLayout_dateFrom.setError("Set the date");
@@ -297,5 +383,6 @@ public class SignUp extends AppCompatActivity implements DatePickerDialog.OnDate
             }
         }
     }
+
 }
 

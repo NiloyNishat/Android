@@ -21,7 +21,7 @@ public class AppliancesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.appliances_fragment, container, false);
+        view = inflater.inflate(R.layout.dynamic_appliances_layout, container, false);
 
         handleArrowClick();
 

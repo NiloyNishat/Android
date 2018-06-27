@@ -10,6 +10,9 @@
     android:layout_height="match_parent"
     >
 
+
+
+
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -94,9 +97,16 @@
 
             </RelativeLayout>
 
+            <com.example.android.safehome.UIHandler.TouchToUnLockView
+                android:id="@+id/tulv_UnlockView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible" />
 
 
         </android.support.design.widget.CoordinatorLayout>
+
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -104,18 +114,10 @@
 
             android:background="#05000000">
             <include
-                layout="@layout/appliances_fragment"/>
+                layout="@layout/dynamic_appliances_layout"/>
         </RelativeLayout>
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
-    <com.example.android.safehome.UIHandler.TouchToUnLockView
-        android:id="@+id/tulv_UnlockView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible" />
-
-
-
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
